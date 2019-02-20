@@ -1,0 +1,258 @@
+---
+title: "least_quantile_regression_testing"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sn)
+library(fGarch)
+library(nloptr)
+```
+
+# Goal
+
+Perform least quantile regression to fit different probability ditributions to LFC data.
+
+Information on least quantile regression:
+
+*Aus Wolfgangs Email:*
+Log-Likelihood für einen Datensatz von n Werten ist ja immer eine Summe aus n Termen. In der Regel maximiert man deren Summe. Alternativ kann man, analog zu LQS-Regression (MASS::lqs ins R), nicht die Summe, sondern ein hohes Quantil (zB 90%) maximieren. Damit spielen die 10% "Outlier" an den Tails keine direkt Rolle für den Schätzer. 
+
+*From Bertsimas, Mazumber, 2014:*
+Least quantile of squares estimator relates to $min(abs(r_q))$. $r_q$ is the residual corresponding to qth ordered absolute residual. This means we have to maximize the quantile(residues, prob=0.9)?
+
+# Approach
+
+Test 5 different approaches:
+
+(A) use mle function, maximum likelihood estimation using maximum likelihood function. This seems to be a not so good idea, because people say thet this should only be used when the errors follow a standard distribution.
+
+For (B) and (C) I fit the density function to the LFC statistics. I first calculated the empirical values x and f(x) from the LFC data.
+
+(B) use nloptr, maximizing the least quantile estimator as defined in Bertsimas, Mazumber, 2014. The results I obtain from this approach are not convincing. Am I doing it right?
+
+(C) nloptr, maximizing the sum of the smallest 90 % residuals.
+
+Cases (D) and (E) are similar, only that I do not fit the density function, but I fit the probability function to the cumulative empirical distribution.
+
+(D) use nloptr, maximizing the least quantile estimator as defined in Bertsimas, Mazumber, 2014.
+
+(E) nloptr, maximizing the sum of the smallest 90 % residuals.
+
+Test for a small data subset of LFC:
+
+```{r}
+counts <- read.delim('/home/katharina/Documents/synced/method_development/adjusted_pvalue_method/results_200_380_380_30_0.1_0.01_0.79_2_10_3_50000_7.tsv', 
+                     sep="\t", skip=1)
+
+LFC_table <- counts %>%
+            dplyr::filter(library0 > 10 & 
+                  library0 < 100) %>%
+            dplyr::mutate(LFC = log2((R0_0+1)/(library0+1))) %>%
+            arrange(LFC)
+
+LFC <- LFC_table$LFC
+```
+
+### A
+
+Based on this example: 
+https://www.r-bloggers.com/fitting-a-model-by-maximum-likelihood/
+
+```{r, warning=FALSE}
+ll_norm_A <- function(mu, sigma) {
+          r = dnorm(LFC, mu, sigma)
+          quant10 <- quantile(r, 0.1, na.rm=TRUE)
+          quant95 <- quantile(r, 0.9, na.rm=TRUE)
+          r_quant <- r[r>=quant10 & r<=quant95]
+          -sum(log(r_quant))
+}
+
+ll_skewnorm_A <- function(mean, sd, xi) {
+          r = dsnorm(-LFC, mean, sd, xi)
+          quant10 <- quantile(r, 0.1, na.rm=TRUE)
+          quant95 <- quantile(r, 0.9, na.rm=TRUE)
+          r_quant <- r[r>=quant10 & r<=quant95]
+          -sum(log(r_quant))
+}
+
+fit_A_norm <- mle(ll_norm_A, 
+             start = list(mu = 0, sigma = 1))
+
+fit_A_skewnorm <- mle(ll_skewnorm_A, 
+             start = list(mean = 0, sd = 1, xi=1.5))
+
+```
+
+
+
+### B
+
+
+```{r, warning=FALSE}
+# we want to fit the probability distribution to the data distribution
+hist_density <- hist(LFC, breaks =1000)
+x_hist = hist_density$breaks[1:(length(hist_density$breaks) - 1)]
+y_hist = hist_density$density
+
+ll_norm_B <- function(x) {
+          x1 = x[1]
+          x2 = x[2]
+          r = abs((dnorm(x_hist, x1, x2) - y_hist))
+          quantile(r, 0.9, na.rm=TRUE)
+}
+
+ll_skewnorm_B <- function(x) {
+          mean = x[1]
+          sd = x[2]
+          xi = x[3]
+          r = abs((dsnorm(-x_hist, mean, sd, xi) - y_hist))
+          quantile(r, 0.9, na.rm=TRUE)
+}
+
+fit_B_norm <- lbfgs(c(0,1), ll_norm_B, 
+               lower = c(-3, -3), upper = c(5,5))
+
+fit_B_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm_B, 
+               lower = c(-3, -3, -3), upper = c(5,5,5))
+
+```
+
+### C
+
+```{r, warning=FALSE}
+
+ll_norm_C <- function(x) {
+          x1 = x[1]
+          x2 = x[2]
+          r = abs((dnorm(x_hist, x1, x2) - y_hist))
+          quant90 = quantile(r, 0.9, na.rm=TRUE)
+          r_quant = r[r <= quant90]
+          sum(r_quant)
+}
+
+ll_skewnorm_C <- function(x) {
+          mean = x[1]
+          sd = x[2]
+          xi = x[3]
+          r = abs((dsnorm(-x_hist, mean, sd, xi) - y_hist))
+          quant90 = quantile(r, 0.9, na.rm=TRUE)
+          r_quant = r[r <= quant90]
+          sum(r_quant)
+}
+
+fit_C_norm <- lbfgs(c(0,1), ll_norm_C, 
+               lower = c(-3, -3), upper = c(5,5))
+
+fit_C_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm_C, 
+               lower = c(-3, -3, -3), upper = c(5,5,5))
+
+```
+
+### D
+
+If we do not want to calculate the histogram statistics before, we could work with a cumulative distribution. Also, I think the other solution with fitting the density function does not remove the impact from the tails, it actually increases it.
+
+```{r, warning=FALSE}
+y_cum = seq(0, 1, by = 1/(length(LFC)-1))
+x_cum = LFC[order(LFC)]
+
+ll_norm_D <- function(x) {
+          x1 = x[1]
+          x2 = x[2]
+          r = abs((pnorm(x_cum, x1, x2) - y_cum))
+          quantile(r, 0.9, na.rm=TRUE)
+}
+
+ll_skewnorm_D <- function(x) {
+          mean = x[1]
+          sd = x[2]
+          xi = x[3]
+          r = abs((psnorm(x_cum, mean, sd, xi) - y_cum))
+          quantile(r, 0.9, na.rm=TRUE)
+}
+
+fit_D_norm <- lbfgs(c(0,1), ll_norm_D, 
+               lower = c(-3, -3), upper = c(5,5))
+
+fit_D_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm_D, 
+               lower = c(-3, -3, -3), upper = c(10,10,10))
+
+```
+
+### E
+
+```{r, warning=FALSE}
+y_cum = seq(0, 1, by = 1/(length(LFC)-1))
+x_cum = LFC[order(LFC)]
+
+ll_norm_E <- function(x) {
+          x1 = x[1]
+          x2 = x[2]
+          r = abs((pnorm(x_cum, x1, x2) - y_cum))
+          quant90 = quantile(r, 0.9, na.rm=TRUE)
+          r_quant = r[r <= quant90]
+          sum(r_quant)
+}
+
+ll_skewnorm_E <- function(x) {
+          mean = x[1]
+          sd = x[2]
+          xi = x[3]
+          r = abs((psnorm(x_cum, mean, sd, xi) - y_cum))
+          quant90 = quantile(r, 0.9, na.rm=TRUE)
+          r_quant = r[r <= quant90]
+          sum(r_quant)
+}
+
+fit_E_norm <- lbfgs(c(0,1), ll_norm_E, 
+               lower = c(-3, -3), upper = c(5,5))
+
+fit_E_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm_E, 
+               lower = c(-3, -3, -3), upper = c(10,10,10))
+
+```
+
+Normal distributions
+
+```{r}
+hist(LFC, prob=TRUE, breaks=100)
+lines(seq(-6,4,0.001), dnorm(seq(-6,4,0.001), 
+                             coef(summary(fit_A_norm))[1], 
+                             coef(summary(fit_A_norm))[2]), col="green")
+lines(seq(-6,4,0.001), dnorm(seq(-6,4,0.001), 
+                             fit_B_norm$par[1], fit_B_norm$par[2]), col="blue")
+lines(seq(-6,4,0.001), dnorm(seq(-6,4,0.001), 
+                             fit_C_norm$par[1], fit_C_norm$par[2]), col="red")
+lines(seq(-6,4,0.001), dnorm(seq(-6,4,0.001), 
+                             fit_D_norm$par[1], fit_D_norm$par[2]), col="purple")
+lines(seq(-6,4,0.001), dnorm(seq(-6,4,0.001), 
+                             fit_E_norm$par[1], fit_E_norm$par[2]), col="pink")
+```
+
+Skew normal distributions (they are by default right skewed, this is why we have to use -x)
+```{r}
+hist(LFC, prob=TRUE, breaks=100)
+lines(seq(-6,4,0.001), dsnorm(-seq(-6,4,0.001), 
+                           mean = coef(summary(fit_A_skewnorm))[1], 
+                           sd = coef(summary(fit_A_skewnorm))[2], 
+                           xi = coef(summary(fit_A_skewnorm))[3]), col="green")
+lines(seq(-6,4,0.001), dsnorm(-seq(-6,4,0.001), 
+                           mean = fit_B_skewnorm$par[1], 
+                           sd = fit_B_skewnorm$par[2], 
+                           xi = fit_B_skewnorm$par[3]), col="blue")
+lines(seq(-6,4,0.001), dsnorm(-seq(-6,4,0.001), 
+                           mean = fit_C_skewnorm$par[1], 
+                           sd = fit_C_skewnorm$par[2], 
+                           xi = fit_C_skewnorm$par[3]), col="red")
+lines(seq(-6,4,0.001), dsnorm(seq(-6,4,0.001), 
+                           mean = fit_D_skewnorm$par[1], 
+                           sd = fit_D_skewnorm$par[2], 
+                           xi = fit_D_skewnorm$par[3]), col="purple")
+lines(seq(-6,4,0.001), dsnorm(seq(-6,4,0.001), 
+                           mean = fit_E_skewnorm$par[1], 
+                           sd = fit_E_skewnorm$par[2], 
+                           xi = fit_E_skewnorm$par[3]), col="pink")
+```

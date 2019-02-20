@@ -1,0 +1,15 @@
+Package: poolscreen
+Type: Package
+Title: Analysis of pooled genetic screens.
+Version: 0.1.0
+Author: Katharina Imkeller
+Maintainer: Katharina Imkeller <k.imkeller@dkfz.de>
+Description: Analysis of pooled genetic screens.
+    (e.g. CRISPR-KO)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends: SummarizedExperiment, nloptr, fGarch
+Suggests: knitr
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1.9000

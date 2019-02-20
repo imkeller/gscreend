@@ -1,0 +1,14 @@
+# take a summarized experiment
+
+se <- poolscreen_dataset()
+
+# normalize
+normalize_se <- function(se) {
+    sizefactors <- colSums(assays(se)$counts)
+    assays(se)$normcounts <- assays(se)$counts/sizefactors * max(sizefactors)
+    se
+}
+
+calculate_lfc <- function(se) {
+    se
+}

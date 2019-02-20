@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1549967261189.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3218459204",
+    "id" : "B5344AA7",
+    "lastKnownWriteTime" : 1549969445,
+    "last_content_update" : 1549969445227,
+    "path" : "~/Documents/synced/method_development/r_package/poolscreen/R/data_input.R",
+    "project_path" : "R/data_input.R",
+    "properties" : {
+        "cursorPosition" : "15,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

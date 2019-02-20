@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1549962788774.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2168537217",
+    "id" : "35C40342",
+    "lastKnownWriteTime" : 1549962784,
+    "last_content_update" : 1549962784,
+    "path" : "~/Documents/synced/method_development/r_package/poolscreen/R/hello.R",
+    "project_path" : "R/hello.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
