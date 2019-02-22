@@ -102,6 +102,7 @@ calculatePValues <- function(object) {
         # data format has to be matrix
         mask <- matrix(mask, nrow=dimensions[1] , ncol=dimensions[2])
 
+        # assign actual p values from fit
         assays(object@sgRNAData)$pval[mask] <-
         psnorm(assays(object@sgRNAData)$lfc[mask],
                fits[[i]][1], fits[[i]][2], fits[[i]][3])

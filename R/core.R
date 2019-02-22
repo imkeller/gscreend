@@ -9,6 +9,7 @@ library(fGarch)
 #'
 #' @return
 #' @export
+#' @import magrittr
 #'
 #' @examples
 runPoolScreen <- function(object) {

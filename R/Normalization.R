@@ -10,7 +10,6 @@ normalizePoolScreenExp <- function(object) {
     sgRNAse <- object@sgRNAData
     sizefactors <- colSums(assays(sgRNAse)$counts)
     normcounts(object) <- assays(sgRNAse)$counts/sizefactors * max(sizefactors)
-    # how can you modify the object withour returning and copying?
     object
 }
 
