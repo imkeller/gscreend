@@ -20,11 +20,10 @@ runPoolScreen <- function(object) {
 
     #sgRNA fitting
     object <- defineFittingIntervals(object)
-    # rank sgRNAs
     object <- calculateIntervalFits(object)
-    # limits determination must be somewhere outside of function!
+    # pvalues and rank sgRNAs
     object <- calculatePValues(object)
     # rank genes
-    object <- calculateGeneRank(object)
+    object <- assignGeneData(object)
     object
 }

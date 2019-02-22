@@ -77,9 +77,11 @@ assignGeneData <- function(object) {
     # all pvalues lower than the threshold are set to a score of 1
     alpha_cutoff <- object@FittingOptions$alphaCutoff
     
+    # calculate pvalues
     gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)
     gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff) 
     
+    # calculate fdrs from pvalues
     fdr_gene_neg <- p.adjust(gene_pval_neg, method = "fdr")
     fdr_gene_pos <- p.adjust(gene_pval_pos, method = "fdr")
 
@@ -89,6 +91,7 @@ assignGeneData <- function(object) {
     colData <- data.frame(samplename = c("T1"),
                           timepoint = c("T1"))
 
+    # build a summarized experiment that contains p values and fdrs
     object@GeneData <- SummarizedExperiment(assays=list(
                                      pvalue_neg = as.matrix(gene_pval_neg),
                                      fdr_neg = as.matrix(fdr_gene_neg),
