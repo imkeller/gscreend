@@ -6,7 +6,7 @@
 #' @slot sgRNAData A SummarizedExperiment containing the data related to sgRNAs. 
 #' @slot FittingIntervals A vector defining the limits of the intervals used
 #' for fitting of null model. 
-#' @slot LFCModelParameters A list of parameters estimated when fitting the null
+#' @slot LFCModelParameters A vector of parameters estimated when fitting the null
 #' model. 
 #' @slot GeneData SummarizedExperiment containing the data related to genes. 
 #' @slot FittingOptions A named list with options for fitting: 
@@ -16,7 +16,7 @@
 setClass("PoolScreenExp", slots = c(
                    sgRNAData = "SummarizedExperiment",
                    FittingIntervals = "vector",
-                   LFCModelParameters = "list",
+                   LFCModelParameters = "matrix",
                    GeneData = "SummarizedExperiment",
                    FittingOptions = "list")
          )

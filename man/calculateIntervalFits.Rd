@@ -9,6 +9,9 @@ calculateIntervalFits(object)
 \arguments{
 \item{object}{}
 }
+\value{
+
+}
 \description{
 Calculate fit parameters for every subset of data
 }

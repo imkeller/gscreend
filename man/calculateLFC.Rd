@@ -12,3 +12,8 @@ calculateLFC(object)
 \description{
 Calculate log fold changes
 }
+\examples{
+load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+# pse is a poolscreen Experiment
+calculateLFC(pse)
+}

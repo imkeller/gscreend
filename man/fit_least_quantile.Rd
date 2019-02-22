@@ -9,6 +9,9 @@ fit_least_quantile(LFC)
 \arguments{
 \item{LFC}{}
 }
+\value{
+fit_skewnorm
+}
 \description{
 Fit paramters for skew normal distribution
 }

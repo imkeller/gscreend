@@ -12,3 +12,8 @@ normalizePoolScreenExp(object)
 \description{
 Normalize raw count
 }
+\examples{
+load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+# pse is a poolscreen Experiment
+normalizePoolScreenExp(pse)
+}

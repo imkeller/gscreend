@@ -5,7 +5,9 @@
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+#' # pse is a poolscreen Experiment
+#' normalizePoolScreenExp(pse)
 normalizePoolScreenExp <- function(object) {
     sgRNAse <- object@sgRNAData
     sizefactors <- colSums(assays(sgRNAse)$counts)
@@ -20,7 +22,9 @@ normalizePoolScreenExp <- function(object) {
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+#' # pse is a poolscreen Experiment
+#' calculateLFC(pse)
 calculateLFC <- function(object) {
     sgRNAse <- object@sgRNAData
     assays(object@sgRNAData)$lfc <- log2((normcounts(object) + 1)/

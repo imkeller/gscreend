@@ -3,7 +3,6 @@
 #' @param object
 #'
 #' @return
-#' @export
 #'
 #' @examples
 defineFittingIntervals <- function(object) {
@@ -21,8 +20,7 @@ defineFittingIntervals <- function(object) {
 #'
 #' @param LFC
 #'
-#' @return
-#' @export
+#' @return fit_skewnorm
 #'
 #' @examples
 fit_least_quantile <- function(LFC) {
@@ -51,7 +49,6 @@ fit_least_quantile <- function(LFC) {
 #' @param object
 #'
 #' @return
-#' @export
 #'
 #' @examples
 calculateIntervalFits <- function(object) {
@@ -64,11 +61,11 @@ calculateIntervalFits <- function(object) {
     lfc_for_fit <- as.vector(samplelfc(object))
 
     # for every count, determine lower interval limit
-    fits <- rep(NA, (length(limits)-1))
+    fits <- matrix(nrow = (length(limits)-1), ncol=3)
     for (i in 1:(length(limits)-1)) {
         lfc_subset <- lfc_for_fit[counts_for_fit > limits[i] &
                                             counts_for_fit < limits[i+1]]
-        fits[i] <- list(fit_least_quantile(lfc_subset)$par)
+        fits[i, ] <- fit_least_quantile(lfc_subset)$par
     }
     object@LFCModelParameters <- fits
     object
@@ -105,7 +102,7 @@ calculatePValues <- function(object) {
         # assign actual p values from fit
         assays(object@sgRNAData)$pval[mask] <-
         psnorm(assays(object@sgRNAData)$lfc[mask],
-               fits[[i]][1], fits[[i]][2], fits[[i]][3])
+               fits[i, 1], fits[i, 2], fits[i, 3])
     }
 
     object

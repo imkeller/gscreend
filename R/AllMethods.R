@@ -40,16 +40,3 @@ setMethod("samplepval", "PoolScreenExp", function(x) {
     # names have to be checked upon input
     assays(se[, se$timepoint == "T1"])$pval
 })
-
-
-# Has a Summarized Experiment (takes as input)
-
-# Can be normalized <- normalized counts go back to object as assay
-
-# LFC can be calculated <- lfc go back to object as assay
-
-# model can be associated per cellline (technical replicates)
-
-# p values can be calculated per sgRNA
-
-# another table is there to show gene p values and gene LFCs
