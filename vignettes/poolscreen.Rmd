@@ -1,28 +1,123 @@
 ---
-title: "Untitled"
-output: pdf_document
+title: "Vignette illustrating the use of poolscreen on pooled CRISPR screen data"
+author: "Katharina Imkeller"
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Example_simulated}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+library(poolscreen)
 ```
 
-## R Markdown
+# Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+What we want to do
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Explanation of skewing
 
-```{r cars}
-summary(cars)
+What is the benefit from our method
+
+# Poolscreen workflow
+
+Poolscreen takes raw sgRNA/siRNA counts as input. 
+The analysis follows the follwing steps:
+1. Input of raw counts, normalization and calculation of log fold changes.
+2. Split log fold changes into intervals dependent on the initial count at T0.
+3. For every interval fit a skew-normal distibution to the data to
+model the null hypothesis (via least quantile regression).
+4. Based on the null model calculate p-values for every sgRNA.
+5. Rank sgRNAs according to p-value and perform robust ranking aggregation to 
+calculate p-values on gene level.
+6. Perform quality control of data and statistical model.
+
+# Installation
+
+devtools::install_github("imkeller/poolscreen")
+
+# Analyzing pooled screening data with poolscreen
+
+## Input: sgRNA counts
+
+Show where simulated data comes from
+
+Get summarized experiment
+
+Get counts from count file
+```{r}
+raw_counts <- read.delim("/home/katharina/Documents/synced/method_development/r_package/poolscreen/inst/extdata/simulated_counts.txt",
+           sep = "\t")
 ```
 
-## Including Plots
+Generate Summarized experiment
 
-You can also embed plots, for example:
+```{r}
+counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
+                           gene = raw_counts$Gene)
+
+colData <- data.frame(samplename = c("library", "R1", "R2"),
+                      # timepoint naming convention: 
+                      # T0 -> reference, 
+                      # T1 -> selected
+                      timepoint = c("T0", "T1", "T1"))
+
+se <- SummarizedExperiment(assays=list(counts=counts_matrix),
+                        rowData=rowData, colData=colData)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Generate poolscreen Experiment
+
+What are the names of the samples?
+
+```{r}
+pse <- createPoolScreenExp(se)
+```
+
+## Run poolscreen
+
+```{r}
+pse <- runPoolScreen(pse )
+
+
+object <- normalizePoolScreenExp(pse)
+    # improve this unsing setMethod
+    object <- calculateLFC(object)
+
+    #sgRNA fitting
+    object <- defineFittingIntervals(object)
+    object <- calculateIntervalFits(object)
+    # pvalues and rank sgRNAs
+    object <- calculatePValues(object)
+    # rank genes
+    object <- assignGeneData(object)
+```
+
+## Quality control
+
+Replicate correlations
+```{r}
+plotReplicateCorrelation(pse)
+```
+
+Model parameters
+
+```{r}
+plotModelParameters(pse) 
+```
+
+
+# Literature
+
+
+# Session
+
+```{r}
+SessionInfo()
+```

@@ -31,11 +31,12 @@ fit_least_quantile <- function(LFC) {
         xi = x[3]
         # left skew normal distribution used for fit
         # because the data is skewed towards negative LFC
-        r = dsnorm(-LFC, mean, sd, xi)
-        quant90 <- quantile(r, 0.1, na.rm=TRUE)
-        r_quant <- r[r >= quant90]
+        r = dsnorm(LFC, mean, sd, xi)
+        quant10 <- quantile(r, 0.1, na.rm=TRUE)
+        quant90 <- quantile(r, 0.95, na.rm=TRUE)
+        r_quant <- r[r >= quant10 & r <= quant90]
         # abs() here is ok?
-        -sum(log(abs(r_quant)))
+        -sum(log(r_quant))
     }
     # non-linear optimization
     fit_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm,
@@ -57,14 +58,17 @@ calculateIntervalFits <- function(object) {
     limits <- object@FittingIntervals
 
     # split counts into intervals
-    counts_for_fit <- as.vector(samplecounts(object))
+    # needs to be done based on reference counts !
+    counts_for_fit <- as.vector(refcounts(object))
     lfc_for_fit <- as.vector(samplelfc(object))
+    ncols <- length(lfc_for_fit)/length(counts_for_fit)
+    refcount_mask <- rep(counts_for_fit, ncols)
 
     # for every count, determine lower interval limit
     fits <- matrix(nrow = (length(limits)-1), ncol=3)
     for (i in 1:(length(limits)-1)) {
-        lfc_subset <- lfc_for_fit[counts_for_fit > limits[i] &
-                                            counts_for_fit < limits[i+1]]
+        lfc_subset <- lfc_for_fit[refcount_mask > limits[i] &
+                                  refcount_mask < limits[i+1]]
         fits[i, ] <- fit_least_quantile(lfc_subset)$par
     }
     object@LFCModelParameters <- fits
