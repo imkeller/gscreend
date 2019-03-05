@@ -11,7 +11,10 @@
 normalizePoolScreenExp <- function(object) {
     sgRNAse <- object@sgRNAData
     sizefactors <- colSums(assays(sgRNAse)$counts)
-    normcounts(object) <- assays(sgRNAse)$counts/sizefactors * max(sizefactors)
+    maxfact <- max(sizefactors)
+    # want to divide each row of matrix by vector elements.
+    # only works with t() trick
+    normcounts(object) <- t(t(assays(sgRNAse)$counts)/sizefactors) * maxfact
     object
 }
 
