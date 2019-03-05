@@ -36,11 +36,11 @@ fit_least_quantile <- function(LFC) {
         quant90 <- quantile(r, 0.95, na.rm=TRUE)
         r_quant <- r[r >= quant10 & r <= quant90]
         # abs() here is ok?
-        -sum(log(r_quant))
+        -sum(log(abs(r_quant)))
     }
     # non-linear optimization
-    fit_skewnorm <- lbfgs(c(0,1, 1.5), ll_skewnorm,
-                            lower = c(-5, -5, -5), upper = c(5,5,5))
+    fit_skewnorm <- lbfgs(c(0,1, 0.5), ll_skewnorm,
+                            lower = c(-2, 0, -2), upper = c(2,2,2))
     fit_skewnorm
 }
 

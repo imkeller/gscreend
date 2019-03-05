@@ -53,6 +53,11 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
 }
 
 
+calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
+    # Gena LFC : mean LFC of sgRNAs
+    sapply(split(lfcs_sgRNAs, genes), mean)
+}
+
 #' Calculate gene rank
 #'
 #' @param object
@@ -84,6 +89,10 @@ assignGeneData <- function(object) {
     # calculate fdrs from pvalues
     fdr_gene_neg <- p.adjust(gene_pval_neg, method = "fdr")
     fdr_gene_pos <- p.adjust(gene_pval_pos, method = "fdr")
+    
+    # calculate gene lfc
+    lfcs_sgRNAs <- samplelfc(object)
+    gene_lfc <- calculateGeneLFC(lfcs_sgRNAs, genes)
 
     # build new summarized experiment for the GeneData slot
     # assuming that gene order is same in neg and pos
@@ -96,7 +105,8 @@ assignGeneData <- function(object) {
                                      pvalue_neg = as.matrix(gene_pval_neg),
                                      fdr_neg = as.matrix(fdr_gene_neg),
                                      pvalue_pos = as.matrix(gene_pval_pos),
-                                     fdr_pos = as.matrix(fdr_gene_pos)),
+                                     fdr_pos = as.matrix(fdr_gene_pos),
+                                     lfc = as.matrix(gene_lfc)),
                          rowData=rowData, colData=colData)
     object
 
