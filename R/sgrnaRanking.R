@@ -23,7 +23,7 @@ defineFittingIntervals <- function(object) {
 #' @return fit_skewnorm
 #'
 #' @examples
-fit_least_quantile <- function(LFC) {
+fit_least_quantile <- function(LFC, quant1, quant2) {
     # log likelihood function of 90% most central LFC values
     ll_skewnorm <- function(x) {
         mean = x[1]
@@ -32,8 +32,8 @@ fit_least_quantile <- function(LFC) {
         # left skew normal distribution used for fit
         # because the data is skewed towards negative LFC
         r = dsnorm(LFC, mean, sd, xi)
-        quant10 <- quantile(r, 0.1, na.rm=TRUE)
-        quant90 <- quantile(r, 0.95, na.rm=TRUE)
+        quant10 <- quantile(r, quant1, na.rm=TRUE)
+        quant90 <- quantile(r, quant2, na.rm=TRUE)
         r_quant <- r[r >= quant10 & r <= quant90]
         # abs() here is ok?
         -sum(log(abs(r_quant)))
@@ -52,7 +52,7 @@ fit_least_quantile <- function(LFC) {
 #' @return
 #'
 #' @examples
-calculateIntervalFits <- function(object) {
+calculateIntervalFits <- function(object, quant1, quant2) {
     # one fit is done for every intervall because the skew is more important
     # for perturbaions with low initial counts
     limits <- object@FittingIntervals
@@ -69,7 +69,7 @@ calculateIntervalFits <- function(object) {
     for (i in 1:(length(limits)-1)) {
         lfc_subset <- lfc_for_fit[refcount_mask > limits[i] &
                                   refcount_mask < limits[i+1]]
-        fits[i, ] <- fit_least_quantile(lfc_subset)$par
+        fits[i, ] <- fit_least_quantile(lfc_subset, quant1, quant2)$par
     }
     object@LFCModelParameters <- fits
     object
