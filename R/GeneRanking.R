@@ -66,7 +66,7 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #' @export
 #'
 #' @examples
-assignGeneData <- function(object) {
+assignGeneData <- function(object, alpha_cutoff) {
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
     # p-values for pos LFC: 1 - neg.pval
@@ -78,9 +78,6 @@ assignGeneData <- function(object) {
             replicate(n_repl, 
                 data.frame(gene = rowData(object@sgRNAData)$gene), 
                 simplify = FALSE))
-
-    # all pvalues lower than the threshold are set to a score of 1
-    alpha_cutoff <- object@FittingOptions$alphaCutoff
     
     # calculate pvalues
     gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)

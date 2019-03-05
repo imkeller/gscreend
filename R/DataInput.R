@@ -28,7 +28,6 @@ createPoolScreenExp <- function(data) {
 createPoolScreenExpFromSE <- function(data) {
     object <- new("PoolScreenExp")
     object@sgRNAData <- data
-    object@FittingOptions <- list(IntervalFraction = 0.1,
-                                  alphaCutoff = 0.05)
+    object@FittingOptions <- list(IntervalFraction = 0.1)
     object
 }

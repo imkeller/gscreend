@@ -85,7 +85,7 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 #' @examples
 calculatePValues <- function(object) {
     # p value matrix needs the same dimensions as coutn data
-    dimensions <- dim(se)
+    dimensions <- dim(object@sgRNAData)
 
     # empty matrix to be filled with pvalues
     assays(object@sgRNAData)$pval <- matrix(nrow = dimensions[1],

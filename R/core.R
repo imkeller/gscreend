@@ -12,7 +12,7 @@ library(fGarch)
 #' @import magrittr
 #'
 #' @examples
-runPoolScreen <- function(object, quant1, quant2) {
+runPoolScreen <- function(object, quant1, quant2, alphacutoff) {
     # normalize
     object <- normalizePoolScreenExp(object)
     # improve this unsing setMethod
@@ -24,6 +24,6 @@ runPoolScreen <- function(object, quant1, quant2) {
     # pvalues and rank sgRNAs
     object <- calculatePValues(object)
     # rank genes
-    object <- assignGeneData(object)
+    object <- assignGeneData(object, alphacutoff)
     object
 }
