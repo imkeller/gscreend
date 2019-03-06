@@ -24,7 +24,8 @@ makeRhoNull <- function(n, p, nperm) {
 
 calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     cut.pvals <- pvals <= alpha_cutoff
-    score_vals <- rank(pvals) / nrow(pvals)
+    # ranking adn scoring according to pvalues
+    score_vals <- rank(pvals) / length(pvals)
     score_vals[!cut.pvals ] <- 1
     
     # calculate rho for every count gene
@@ -36,10 +37,10 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     set.seed(123)
     permutations=10 * nrow(unique(genes))
     
-    rho_nullh <- lapply(guides_per_gene,
+    rho_nullh <- mclapply(guides_per_gene,
                         makeRhoNull,
                         score_vals,
-                        permutations)
+                        permutations, mc.cores=2)
     
     # Split by gene, make comparison with null model from makeRhoNull,
     # and unsplit by gene
