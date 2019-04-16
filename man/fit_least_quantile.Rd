@@ -4,7 +4,7 @@
 \alias{fit_least_quantile}
 \title{Fit paramters for skew normal distribution}
 \usage{
-fit_least_quantile(LFC)
+fit_least_quantile(LFC, quant1, quant2)
 }
 \arguments{
 \item{LFC}{}

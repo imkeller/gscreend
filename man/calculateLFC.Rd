@@ -9,6 +9,9 @@ calculateLFC(object)
 \arguments{
 \item{object}{}
 }
+\value{
+object
+}
 \description{
 Calculate log fold changes
 }

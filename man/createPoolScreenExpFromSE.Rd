@@ -9,6 +9,9 @@ createPoolScreenExpFromSE(data)
 \arguments{
 \item{data}{}
 }
+\value{
+object
+}
 \description{
 Create PoolScreen Experiment from summarized experiment
 }

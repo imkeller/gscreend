@@ -9,6 +9,9 @@ calculatePValues(object)
 \arguments{
 \item{object}{}
 }
+\value{
+object
+}
 \description{
 Calculate p-values
 }

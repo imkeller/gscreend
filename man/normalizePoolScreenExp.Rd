@@ -9,6 +9,9 @@ normalizePoolScreenExp(object)
 \arguments{
 \item{object}{}
 }
+\value{
+object
+}
 \description{
 Normalize raw count
 }

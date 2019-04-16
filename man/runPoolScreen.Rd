@@ -4,10 +4,13 @@
 \alias{runPoolScreen}
 \title{run PoolScreen}
 \usage{
-runPoolScreen(object)
+runPoolScreen(object, quant1, quant2, alphacutoff)
 }
 \arguments{
 \item{object}{}
+}
+\value{
+object
 }
 \description{
 run PoolScreen

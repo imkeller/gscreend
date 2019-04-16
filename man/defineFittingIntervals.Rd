@@ -10,7 +10,7 @@ defineFittingIntervals(object)
 \item{object}{}
 }
 \value{
-
+object
 }
 \description{
 Calculate intervall limits for splitting data into subsets

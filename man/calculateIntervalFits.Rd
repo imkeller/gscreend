@@ -4,13 +4,13 @@
 \alias{calculateIntervalFits}
 \title{Calculate fit parameters for every subset of data}
 \usage{
-calculateIntervalFits(object)
+calculateIntervalFits(object, quant1, quant2)
 }
 \arguments{
 \item{object}{}
 }
 \value{
-
+object
 }
 \description{
 Calculate fit parameters for every subset of data
