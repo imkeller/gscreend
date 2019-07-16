@@ -5,8 +5,8 @@
 #' @return object
 #' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-#' # pse is a poolscreen Experiment
+#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+#' # pse is a of PoolScreenExp class
 #' normalizePoolScreenExp(pse)
 normalizePoolScreenExp <- function(object) {
     sgRNAse <- object@sgRNAData
@@ -25,8 +25,8 @@ normalizePoolScreenExp <- function(object) {
 #' @return object
 #' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-#' # pse is a poolscreen Experiment
+#' @examples load(system.file("data" "gscreend_experiment.RData", package = "gscreend"))
+#' # pse is a of PoolScreenExp class
 #' calculateLFC(pse)
 calculateLFC <- function(object) {
     sgRNAse <- object@sgRNAData

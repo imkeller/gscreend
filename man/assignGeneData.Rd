@@ -15,3 +15,8 @@ object
 \description{
 Calculate gene rank
 }
+\examples{
+load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+# pse is a object of PoolScreenExp class
+assignGeneData(pse, alpha_cutoff=0.05)
+}

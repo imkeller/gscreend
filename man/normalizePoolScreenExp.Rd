@@ -16,7 +16,7 @@ object
 Normalize raw count
 }
 \examples{
-load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-# pse is a poolscreen Experiment
+load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+# pse is a of PoolScreenExp class
 normalizePoolScreenExp(pse)
 }

@@ -1,13 +1,13 @@
 #' Plot replicate correlation
 #'
-#' @param object 
-#' @param rep1 
-#' @param rep2 
+#' @param object
+#' @param rep1
+#' @param rep2
 #'
 #' @return plot
 #' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
 #' # pse is a poolscreen Experiment with two replicates R1 and R2
 #' plotReplicateCorrelation(pse, rep1 = "R1", rep2 = "rep2")
 plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
@@ -20,13 +20,13 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
 
 #' Plot model parameters from the fitting
 #'
-#' @param object 
+#' @param object
 #'
 #' @return plot
 #' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-#' # pse is a poolscreen Experiment
+#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+#' # pse is a object of PoolScreenExp class
 #' plotModelParameters(pse)
 plotModelParameters <- function(object) {
     limits <- object@FittingIntervals

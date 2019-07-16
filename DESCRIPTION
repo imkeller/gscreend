@@ -1,12 +1,12 @@
-Package: poolscreen
+Package: gscreend
 Type: Package
 Title: Analysis of pooled genetic screens.
-Version: 0.1.0
+Version: 0.1.1
 Author: Katharina Imkeller
 Maintainer: Katharina Imkeller <k.imkeller@dkfz.de>
 Description: Analysis of pooled genetic screens.
     (e.g. CRISPR-KO)
-License: What license is it under?
+License: GNU GENERAL PUBLIC LICENSE, Version 3
 Encoding: UTF-8
 LazyData: true
 Depends: SummarizedExperiment, nloptr, fGarch

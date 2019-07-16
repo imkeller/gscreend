@@ -7,10 +7,6 @@
 plotReplicateCorrelation(object, rep1 = "R1", rep2 = "R2")
 }
 \arguments{
-\item{object}{}
-
-\item{rep1}{}
-
 \item{rep2}{}
 }
 \value{
@@ -18,4 +14,9 @@ plot
 }
 \description{
 Plot replicate correlation
+}
+\examples{
+load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+# pse is a poolscreen Experiment with two replicates R1 and R2
+plotReplicateCorrelation(pse, rep1 = "R1", rep2 = "rep2")
 }

@@ -15,3 +15,8 @@ plot
 \description{
 Plot model parameters from the fitting
 }
+\examples{
+load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+# pse is a object of PoolScreenExp class
+plotModelParameters(pse)
+}

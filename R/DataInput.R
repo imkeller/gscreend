@@ -6,10 +6,10 @@
 #' @return object
 #' @export
 #'
-#' @examples load(system.file("inst/extdata", "simulated_counts.txt", package = "poolscreen"))
-#' 
+#' @examples load(system.file("inst/extdata", "simulated_counts.txt", package = "gscreend"))
+#'
 #'counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
-#' 
+#'
 #'rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
 #'                      gene = raw_counts$Gene)
 #'
@@ -19,8 +19,8 @@
 #'se <- SummarizedExperiment(assays=list(counts=counts_matrix),
 #'                           rowData=rowData, colData=colData)
 #'
-#'# create a poolscreen experiment                                                  
-#'pse <- createPoolScreenExp(se)                           
+#'# create a poolscreen experiment
+#'pse <- createPoolScreenExp(se)
 createPoolScreenExp <- function(data) {
     if(is(data, "SummarizedExperiment")) {
         message("Creating PoolScreenExp object from a SummarizedExperiment object.")

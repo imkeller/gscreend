@@ -15,3 +15,20 @@ object
 \description{
 Create PoolScreen Experiment
 }
+\examples{
+load(system.file("inst/extdata", "simulated_counts.txt", package = "gscreend"))
+
+counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
+
+rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
+                     gene = raw_counts$Gene)
+
+colData <- data.frame(samplename = c("library", "R1", "R2"),
+                     timepoint = c("T0", "T1", "T1"))
+
+se <- SummarizedExperiment(assays=list(counts=counts_matrix),
+                          rowData=rowData, colData=colData)
+
+# create a poolscreen experiment
+pse <- createPoolScreenExp(se)
+}

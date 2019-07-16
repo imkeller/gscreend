@@ -3,7 +3,7 @@ library(nloptr)
 library(fGarch)
 
 # wrapper funtion to run complete analysis
-#' run PoolScreen
+#' run gscreend
 #'
 #' @param object
 #'
@@ -12,9 +12,9 @@ library(fGarch)
 #' @import magrittr
 #'
 #' @examples
-runPoolScreen <- function(object, 
-                          quant1 = 0.1, 
-                          quant2 = 0.9, 
+RunGscreend <- function(object,
+                          quant1 = 0.1,
+                          quant2 = 0.9,
                           alphacutoff = 0.05) {
     # normalize
     normalizePoolScreenExp(object) %>%

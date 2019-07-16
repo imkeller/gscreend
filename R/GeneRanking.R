@@ -1,4 +1,4 @@
-# This method is adapted from Li et al and others
+# This method is adapted from Li et al. and others
 # But I have to write it from scratch because there is no
 # available R package (only one on github, but this would be to difficult to
 # install)
@@ -27,21 +27,21 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     # ranking adn scoring according to pvalues
     score_vals <- rank(pvals) / length(pvals)
     score_vals[!cut.pvals ] <- 1
-    
+
     # calculate rho for every count gene
     rho <- unsplit(sapply(split(score_vals, genes), alphaBeta), genes)
-    
+
     guides_per_gene <- sort(unique(table(genes)))
-    
+
     # store this as model parameter
     set.seed(123)
     permutations=10 * nrow(unique(genes))
-    
+
     rho_nullh <- mclapply(guides_per_gene,
                         makeRhoNull,
                         score_vals,
                         permutations, mc.cores=2)
-    
+
     # Split by gene, make comparison with null model from makeRhoNull,
     # and unsplit by gene
     pvalue_gene <- mclapply(split(rho, genes), function(x) {
@@ -49,7 +49,7 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
         mean(rho_nullh[
             guides_per_gene == n_sgrnas][[1]] <= x[[1]])
     }, mc.cores=6)
-    
+
     pvalue_gene
 }
 
@@ -66,30 +66,30 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #' @return object
 #' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-#' # pse is a poolscreen Experiment
+#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+#' # pse is a object of PoolScreenExp class
 #' assignGeneData(pse, alpha_cutoff=0.05)
 assignGeneData <- function(object, alpha_cutoff) {
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
     # p-values for pos LFC: 1 - neg.pval
     pvals_pos <- 1 - samplepval(object)
-   
+
     # genes (append gene list as many times as replicates)
     n_repl <- dim(pvals_neg)[2]
-    genes <- do.call("rbind", 
-            replicate(n_repl, 
-                data.frame(gene = rowData(object@sgRNAData)$gene), 
+    genes <- do.call("rbind",
+            replicate(n_repl,
+                data.frame(gene = rowData(object@sgRNAData)$gene),
                 simplify = FALSE))
-    
+
     # calculate pvalues
     gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)
-    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff) 
-    
+    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff)
+
     # calculate fdrs from pvalues
     fdr_gene_neg <- p.adjust(gene_pval_neg, method = "fdr")
     fdr_gene_pos <- p.adjust(gene_pval_pos, method = "fdr")
-    
+
     # calculate gene lfc
     lfcs_sgRNAs <- samplelfc(object)
     gene_lfc <- calculateGeneLFC(lfcs_sgRNAs, genes)
