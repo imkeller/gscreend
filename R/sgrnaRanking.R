@@ -2,7 +2,7 @@
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #'
 #' @examples
 defineFittingIntervals <- function(object) {
@@ -49,7 +49,7 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #'
 #' @examples
 calculateIntervalFits <- function(object, quant1, quant2) {
@@ -79,10 +79,12 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #' @export
 #'
-#' @examples
+#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+#' # pse is a poolscreen Experiment
+#' calculatePValues(pse)
 calculatePValues <- function(object) {
     # p value matrix needs the same dimensions as coutn data
     dimensions <- dim(object@sgRNAData)

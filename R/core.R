@@ -7,23 +7,24 @@ library(fGarch)
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #' @export
 #' @import magrittr
 #'
 #' @examples
-runPoolScreen <- function(object, quant1, quant2, alphacutoff) {
+runPoolScreen <- function(object, 
+                          quant1 = 0.1, 
+                          quant2 = 0.9, 
+                          alphacutoff = 0.05) {
     # normalize
-    object <- normalizePoolScreenExp(object)
+    normalizePoolScreenExp(object) %>%
     # improve this unsing setMethod
-    object <- calculateLFC(object)
-
+    calculateLFC() %>%
     #sgRNA fitting
-    object <- defineFittingIntervals(object)
-    object <- calculateIntervalFits(object, quant1, quant2)
+    defineFittingIntervals() %>%
+    calculateIntervalFits(quant1, quant2) %>%
     # pvalues and rank sgRNAs
-    object <- calculatePValues(object)
+    calculatePValues() %>%
     # rank genes
-    object <- assignGeneData(object, alphacutoff)
-    object
+    assignGeneData(alphacutoff)
 }

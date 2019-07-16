@@ -2,7 +2,7 @@
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #' @export
 #'
 #' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
@@ -22,7 +22,7 @@ normalizePoolScreenExp <- function(object) {
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #' @export
 #'
 #' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))

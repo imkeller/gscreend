@@ -63,10 +63,12 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #'
 #' @param object
 #'
-#' @return
+#' @return object
 #' @export
 #'
-#' @examples
+#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
+#' # pse is a poolscreen Experiment
+#' assignGeneData(pse, alpha_cutoff=0.05)
 assignGeneData <- function(object, alpha_cutoff) {
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
