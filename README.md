@@ -1,4 +1,4 @@
-# gscreend - analysis of pooled CRIPR screens
+# gscreend - analysis of pooled CRISPR screens
 
 
 ### Run gscreend, as also explained in the vignette section
