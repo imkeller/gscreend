@@ -3,28 +3,29 @@
 # available R package (only one on github, but this would be to difficult to
 # install)
 
-
 # helper functions, according to definition in Li et al.
 # probability needs to be transformed by beta distribution
 
 alphaBeta <- function(p_test) {
     p_test <- sort(p_test)
     n <- length(p_test)
-    return(min(pbeta(p_test, 1:n, n - (1:n) + 1)))
+    return(min(stats::pbeta(p_test, 1:n, n - (1:n) + 1)))
 }
 
 # calculate rho value
-makeRhoNull <- function(n, p, nperm) {
-    mclapply(1:nperm, function(x) {
+makeRhoNull <- function(n, p, nperm, n_cores) {
+    parallel::mclapply(1:nperm, function(x) {
         p_test <- sort.int(sample(p, n, replace = FALSE))
         alphaBeta(p_test)
-    }, mc.cores = 6)
+        # number of cores defined in the input function
+    }, mc.cores = n_cores)
 }
 
-
-calculateGenePval <- function(pvals, genes, alpha_cutoff) {
+#' @import methods
+#'
+calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
     cut.pvals <- pvals <= alpha_cutoff
-    # ranking adn scoring according to pvalues
+    # ranking and scoring according to pvalues
     score_vals <- rank(pvals) / length(pvals)
     score_vals[!cut.pvals ] <- 1
 
@@ -34,21 +35,22 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     guides_per_gene <- sort(unique(table(genes)))
 
     # store this as model parameter
-    set.seed(123)
     permutations=10 * nrow(unique(genes))
 
-    rho_nullh <- mclapply(guides_per_gene,
+    rho_nullh <- parallel::mclapply(guides_per_gene,
                         makeRhoNull,
                         score_vals,
-                        permutations, mc.cores=2)
+                        permutations, n_cores,
+                        # number of cores defined in the input function
+                        mc.cores=n_cores)
 
     # Split by gene, make comparison with null model from makeRhoNull,
     # and unsplit by gene
-    pvalue_gene <- mclapply(split(rho, genes), function(x) {
+    pvalue_gene <- parallel::mclapply(split(rho, genes), function(x) {
         n_sgrnas = length(x)
         mean(rho_nullh[
             guides_per_gene == n_sgrnas][[1]] <= x[[1]])
-    }, mc.cores=6)
+    }, mc.cores= n_cores)
 
     pvalue_gene
 }
@@ -61,15 +63,14 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 
 #' Calculate gene rank
 #'
-#' @param object
+#' @param object PoolScreenExp object
+#' @param alpha_cutoff alpha cutoff for alpha-RRA (default: 0.05)
+#' @param n_cores number of cores to be used (default: 1)
 #'
 #' @return object
-#' @export
 #'
-#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
-#' # pse is a object of PoolScreenExp class
-#' assignGeneData(pse, alpha_cutoff=0.05)
-assignGeneData <- function(object, alpha_cutoff) {
+
+assignGeneData <- function(object, alpha_cutoff, n_cores) {
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
     # p-values for pos LFC: 1 - neg.pval
@@ -78,17 +79,18 @@ assignGeneData <- function(object, alpha_cutoff) {
     # genes (append gene list as many times as replicates)
     n_repl <- dim(pvals_neg)[2]
     genes <- do.call("rbind",
-            replicate(n_repl,
-                data.frame(gene = rowData(object@sgRNAData)$gene),
-                simplify = FALSE))
+                     replicate(n_repl,
+                               data.frame(gene =
+                                              rowData(object@sgRNAData)$gene),
+                               simplify = FALSE))
 
     # calculate pvalues
-    gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)
-    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff)
+    gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff, n_cores)
+    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff, n_cores)
 
     # calculate fdrs from pvalues
-    fdr_gene_neg <- p.adjust(gene_pval_neg, method = "fdr")
-    fdr_gene_pos <- p.adjust(gene_pval_pos, method = "fdr")
+    fdr_gene_neg <- stats::p.adjust(gene_pval_neg, method = "fdr")
+    fdr_gene_pos <- stats::p.adjust(gene_pval_pos, method = "fdr")
 
     # calculate gene lfc
     lfcs_sgRNAs <- samplelfc(object)
@@ -107,7 +109,7 @@ assignGeneData <- function(object, alpha_cutoff) {
                                      pvalue_pos = as.matrix(gene_pval_pos),
                                      fdr_pos = as.matrix(fdr_gene_pos),
                                      lfc = as.matrix(gene_lfc)),
-                         rowData=rowData, colData=colData)
+                                     rowData=rowData, colData=colData)
     object
 
 }

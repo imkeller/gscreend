@@ -7,16 +7,23 @@
 plotReplicateCorrelation(object, rep1 = "R1", rep2 = "R2")
 }
 \arguments{
-\item{rep2}{}
+\item{object}{PoolScreenExp object}
+
+\item{rep1}{Name of replicate 1}
+
+\item{rep2}{Name of replicate 2}
 }
 \value{
-plot
+replicate_plot
 }
 \description{
 Plot replicate correlation
 }
 \examples{
-load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+package = "gscreend"))
 # pse is a poolscreen Experiment with two replicates R1 and R2
-plotReplicateCorrelation(pse, rep1 = "R1", rep2 = "rep2")
+pse_an <- RunGscreend(pse)
+plotReplicateCorrelation(pse_an, rep1 = "R1", rep2 = "R2")
+
 }

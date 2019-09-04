@@ -1,15 +1,18 @@
 #' Plot replicate correlation
 #'
-#' @param object
-#' @param rep1
-#' @param rep2
+#' @param object PoolScreenExp object
+#' @param rep1 Name of replicate 1
+#' @param rep2 Name of replicate 2
 #'
-#' @return plot
+#' @return replicate_plot
 #' @export
 #'
-#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
+#' @examples pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+#' package = "gscreend"))
 #' # pse is a poolscreen Experiment with two replicates R1 and R2
-#' plotReplicateCorrelation(pse, rep1 = "R1", rep2 = "rep2")
+#' pse_an <- RunGscreend(pse)
+#' plotReplicateCorrelation(pse_an, rep1 = "R1", rep2 = "R2")
+#'
 plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
     se <- object@sgRNAData
     counts1 <- assays(se[, se$samplename == rep1])$normcounts
@@ -20,19 +23,21 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
 
 #' Plot model parameters from the fitting
 #'
-#' @param object
+#' @param object  PoolScreenExp object
 #'
 #' @return plot
 #' @export
 #'
-#' @examples load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
-#' # pse is a object of PoolScreenExp class
-#' plotModelParameters(pse)
+#' @examples pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+#' package = "gscreend"))
+#' # pse is a poolscreen Experiment with two replicates R1 and R2
+#' pse_an <- RunGscreend(pse)
+#' plotModelParameters(pse_an)
 plotModelParameters <- function(object) {
     limits <- object@FittingIntervals
     limits <- limits[1:length(limits) - 1]
     parameters <- object@LFCModelParameters
-    par(mfrow=c(2,2))
+    graphics::par(mfrow=c(2,2))
     plot(limits, parameters[,1], main = "Mean")
     plot(limits, parameters[,2], main = "Sd")
     plot(limits, parameters[,3], main = "Xi")

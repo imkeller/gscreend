@@ -7,7 +7,13 @@
 calculateIntervalFits(object, quant1, quant2)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
+
+\item{quant1}{lower quantile for least quantile of squares regression
+(default: 0.1)}
+
+\item{quant2}{upper quantile for least quantile of squares regression
+(default: 0.9)}
 }
 \value{
 object

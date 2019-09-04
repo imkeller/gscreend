@@ -7,7 +7,13 @@
 fit_least_quantile(LFC, quant1, quant2)
 }
 \arguments{
-\item{LFC}{}
+\item{LFC}{logarithmic fold changes of gRNA counts}
+
+\item{quant1}{lower quantile for least quantile of squares regression
+(default: 0.1)}
+
+\item{quant2}{upper quantile for least quantile of squares regression
+(default: 0.9)}
 }
 \value{
 fit_skewnorm

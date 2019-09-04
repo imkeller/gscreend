@@ -7,7 +7,7 @@
 plotModelParameters(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
 }
 \value{
 plot
@@ -16,7 +16,9 @@ plot
 Plot model parameters from the fitting
 }
 \examples{
-load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
-# pse is a object of PoolScreenExp class
-plotModelParameters(pse)
+pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+package = "gscreend"))
+# pse is a poolscreen Experiment with two replicates R1 and R2
+pse_an <- RunGscreend(pse)
+plotModelParameters(pse_an)
 }

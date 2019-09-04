@@ -7,7 +7,7 @@
 normalizePoolScreenExp(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
 }
 \value{
 object
@@ -16,7 +16,8 @@ object
 Normalize raw count
 }
 \examples{
-load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
-# pse is a of PoolScreenExp class
+pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+package = "gscreend"))
+# pse is a PoolScreenExp
 normalizePoolScreenExp(pse)
 }

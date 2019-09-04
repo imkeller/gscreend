@@ -2,16 +2,16 @@
 % Please edit documentation in R/DataInput.R
 \name{createPoolScreenExpFromSE}
 \alias{createPoolScreenExpFromSE}
-\title{Create PoolScreen Experiment from summarized experiment}
+\title{Create PoolScreenExp Experiment from summarized experiment}
 \usage{
 createPoolScreenExpFromSE(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{SummarizedExperiment object containing gRNA level data}
 }
 \value{
 object
 }
 \description{
-Create PoolScreen Experiment from summarized experiment
+Create PoolScreenExp Experiment from summarized experiment
 }

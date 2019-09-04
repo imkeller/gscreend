@@ -7,16 +7,11 @@
 calculatePValues(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
 }
 \value{
 object
 }
 \description{
 Calculate p-values
-}
-\examples{
-load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-# pse is a poolscreen Experiment
-calculatePValues(pse)
 }

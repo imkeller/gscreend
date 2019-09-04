@@ -7,7 +7,7 @@
 calculateLFC(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
 }
 \value{
 object
@@ -16,7 +16,9 @@ object
 Calculate log fold changes
 }
 \examples{
-load(system.file("data" "gscreend_experiment.RData", package = "gscreend"))
+pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+package = "gscreend"))
 # pse is a of PoolScreenExp class
-calculateLFC(pse)
+norm_pse <- normalizePoolScreenExp(pse)
+calculateLFC(norm_pse)
 }

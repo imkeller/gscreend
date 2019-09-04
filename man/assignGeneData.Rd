@@ -4,19 +4,18 @@
 \alias{assignGeneData}
 \title{Calculate gene rank}
 \usage{
-assignGeneData(object, alpha_cutoff)
+assignGeneData(object, alpha_cutoff, n_cores)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
+
+\item{alpha_cutoff}{alpha cutoff for alpha-RRA (default: 0.05)}
+
+\item{n_cores}{number of cores to be used (default: 1)}
 }
 \value{
 object
 }
 \description{
 Calculate gene rank
-}
-\examples{
-load(system.file("data", "gscreend_experiment.RData", package = "gscreend"))
-# pse is a object of PoolScreenExp class
-assignGeneData(pse, alpha_cutoff=0.05)
 }

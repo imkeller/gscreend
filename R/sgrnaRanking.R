@@ -1,16 +1,16 @@
-#' Calculate intervall limits for splitting data into subsets
+#' Calculate interval limits for splitting data into subsets
 #'
-#' @param object
+#' @param object  PoolScreenExp object
 #'
 #' @return object
 #'
-#' @examples
 defineFittingIntervals <- function(object) {
     # split intervals based on library counts
-    # use 10% of data (parameter set in the object creation function)
+    # use 10% of data (parameter set in the object creation function
+    # createPoolScreenExpFromSE())
     quantile_lims = seq(0,1,object@FittingOptions$IntervalFraction)
     # use unique(): in case there are many 0 the first intervals are merged
-    limits <- unique(quantile(refcounts(object),quantile_lims))
+    limits <- unique(stats::quantile(refcounts(object),quantile_lims))
     object@FittingIntervals <- as.integer(limits)
     object
 }
@@ -18,11 +18,17 @@ defineFittingIntervals <- function(object) {
 
 #'  Fit paramters for skew normal distribution
 #'
-#' @param LFC
+#' @param LFC logarithmic fold changes of gRNA counts
+#' @param quant1 lower quantile for least quantile of squares regression
+#' (default: 0.1)
+#' @param quant2 upper quantile for least quantile of squares regression
+#' (default: 0.9)
+#'
+#' @import nloptr
+#' @import fGarch
 #'
 #' @return fit_skewnorm
 #'
-#' @examples
 fit_least_quantile <- function(LFC, quant1, quant2) {
     # log likelihood function of 90% most central LFC values
     ll_skewnorm <- function(x) {
@@ -32,8 +38,8 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
         # left skew normal distribution used for fit
         # because the data is skewed towards negative LFC
         r = dsnorm(LFC, mean, sd, xi)
-        quant10 <- quantile(r, quant1, na.rm=TRUE)
-        quant90 <- quantile(r, quant2, na.rm=TRUE)
+        quant10 <- stats::quantile(r, quant1, na.rm=TRUE)
+        quant90 <- stats::quantile(r, quant2, na.rm=TRUE)
         r_quant <- r[r >= quant10 & r <= quant90]
         # abs() here is ok?
         -sum(log(abs(r_quant)))
@@ -47,11 +53,14 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
 
 #' Calculate fit parameters for every subset of data
 #'
-#' @param object
+#' @param object  PoolScreenExp object
+#' @param quant1 lower quantile for least quantile of squares regression
+#' (default: 0.1)
+#' @param quant2 upper quantile for least quantile of squares regression
+#' (default: 0.9)
 #'
 #' @return object
 #'
-#' @examples
 calculateIntervalFits <- function(object, quant1, quant2) {
     # one fit is done for every intervall because the skew is more important
     # for perturbaions with low initial counts
@@ -77,14 +86,10 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 
 #' Calculate p-values
 #'
-#' @param object
+#' @param object PoolScreenExp object
 #'
 #' @return object
-#' @export
 #'
-#' @examples load(system.file("data", "poolscreen_experiment.RData", package = "poolscreen"))
-#' # pse is a poolscreen Experiment
-#' calculatePValues(pse)
 calculatePValues <- function(object) {
     # p value matrix needs the same dimensions as coutn data
     dimensions <- dim(object@sgRNAData)

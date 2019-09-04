@@ -13,7 +13,7 @@ vignette: >
 
 ```{r}
 library(gscreend)
-library(tidyverse)
+library(SummarizedExperiment)
 ```
 
 # Introduction
@@ -45,8 +45,9 @@ The simulated data used in this example has been generated using ths simulation 
 Raw count data consists of gRNA counts in the libary sequencing and different replicates after XXX days.
 
 ```{r}
-raw_counts <- read.delim("../inst/extdata/simulated_counts.txt",
-           sep = "\t")
+raw_counts <- read.table(
+                         system.file("extdata", "simulated_counts.txt", package = "gscreend"),
+                         header=TRUE)
 ```
 
 Generate a summarized experiment fromt the count data
@@ -78,7 +79,7 @@ pse <- createPoolScreenExp(se)
 Run gscreend
 
 ```{r}
-pse <- RunGscreend(pse, 0.1, 0.9, 0.1)
+pse_an <- RunGscreend(pse, 0.1, 0.9, 0.1)
 
 ```
 
@@ -87,35 +88,24 @@ pse <- RunGscreend(pse, 0.1, 0.9, 0.1)
 gscreend provides basic quality control functions for inspection of replicate correlation for example.
 
 ```{r}
-plotReplicateCorrelation(pse)
+plotReplicateCorrelation(pse_an)
 ```
 
 Model parameters
 
 ```{r}
-plotModelParameters(pse) 
+plotModelParameters(pse_an) 
 ```
 
 # Results
 
-Essential and growthsuppressing genes using a certain threshold
+Essential genes results table
 
 ```{r}
-data.frame(Name = rownames(assays(pse@GeneData)$fdr_neg),
+res_table <- data.frame(Name = rownames(assays(pse@GeneData)$fdr_neg),
            fdr = assays(pse@GeneData)$fdr_neg, 
            pval = as.numeric(assays(pse@GeneData)$pvalue_neg[,1]),
-           lfc = assays(pse@GeneData)$lfc) %>%
-    arrange(pval, lfc)
-
+           lfc = assays(pse@GeneData)$lfc)
 ```
 
-Results table
 
-# Literature
-
-
-# Session
-
-```{r}
-SessionInfo()
-```

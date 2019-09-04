@@ -2,16 +2,16 @@
 % Please edit documentation in R/sgrnaRanking.R
 \name{defineFittingIntervals}
 \alias{defineFittingIntervals}
-\title{Calculate intervall limits for splitting data into subsets}
+\title{Calculate interval limits for splitting data into subsets}
 \usage{
 defineFittingIntervals(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
 }
 \value{
 object
 }
 \description{
-Calculate intervall limits for splitting data into subsets
+Calculate interval limits for splitting data into subsets
 }

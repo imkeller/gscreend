@@ -4,14 +4,49 @@
 \alias{RunGscreend}
 \title{run gscreend}
 \usage{
-RunGscreend(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05)
+RunGscreend(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05,
+  n_cores = 1)
 }
 \arguments{
-\item{object}{}
+\item{object}{PoolScreenExp object}
+
+\item{quant1}{lower quantile for least quantile of squares regression
+(default: 0.1)}
+
+\item{quant2}{upper quantile for least quantile of squares regression
+(default: 0.9)}
+
+\item{alphacutoff}{alpha cutoff for alpha-RRA (default: 0.05)}
+
+\item{n_cores}{number of cores to be used (default: 1)}
 }
 \value{
 object
 }
 \description{
 run gscreend
+}
+\examples{
+raw_counts <- read.table(
+                        system.file("extdata", "simulated_counts.txt",
+                        package = "gscreend"),
+                        header=TRUE)
+
+# Create the PoolScreenExp to be analyzed
+counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
+
+rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
+                     gene = raw_counts$Gene)
+
+colData <- data.frame(samplename = c("library", "R1", "R2"),
+                     timepoint = c("T0", "T1", "T1"))
+
+library(SummarizedExperiment)
+se <- SummarizedExperiment(assays=list(counts=counts_matrix),
+                          rowData=rowData, colData=colData)
+
+pse <- createPoolScreenExp(se)
+
+# Run Analysis
+pse_an <- RunGscreend(pse)
 }

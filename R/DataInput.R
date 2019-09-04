@@ -1,12 +1,16 @@
 
-#' Create PoolScreen Experiment
+#' Create PoolScreenExp Experiment
 #'
-#' @param data
+#' @param data Input data object containing gRNA level data
+#' (SummarizedExperiment)
 #'
-#' @return object
+#' @return object  PoolScreenExp object
 #' @export
 #'
-#' @examples load(system.file("inst/extdata", "simulated_counts.txt", package = "gscreend"))
+#' @examples raw_counts <- read.table(
+#'                         system.file("extdata", "simulated_counts.txt",
+#'                         package = "gscreend"),
+#'                         header=TRUE)
 #'
 #'counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
 #'
@@ -16,10 +20,11 @@
 #'colData <- data.frame(samplename = c("library", "R1", "R2"),
 #'                      timepoint = c("T0", "T1", "T1"))
 #'
+#'library(SummarizedExperiment)
 #'se <- SummarizedExperiment(assays=list(counts=counts_matrix),
 #'                           rowData=rowData, colData=colData)
 #'
-#'# create a poolscreen experiment
+#'# create a PoolScreenExp experiment
 #'pse <- createPoolScreenExp(se)
 createPoolScreenExp <- function(data) {
     if(is(data, "SummarizedExperiment")) {
@@ -31,13 +36,12 @@ createPoolScreenExp <- function(data) {
     object
 }
 
-#' Create PoolScreen Experiment from summarized experiment
+#' Create PoolScreenExp Experiment from summarized experiment
 #'
-#' @param data
+#' @param data SummarizedExperiment object containing gRNA level data
 #'
 #' @return object
 #'
-#' @examples
 createPoolScreenExpFromSE <- function(data) {
     object <- new("PoolScreenExp")
     object@sgRNAData <- data
