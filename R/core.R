@@ -35,6 +35,7 @@
 #'
 #'# Run Analysis
 #'pse_an <- RunGscreend(pse)
+#'
 
 RunGscreend <- function(object,
                           quant1 = 0.1,

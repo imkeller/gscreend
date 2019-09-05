@@ -16,9 +16,10 @@ plot
 Plot model parameters from the fitting
 }
 \examples{
-pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
+# import a PoolScreenExp object that has been generated using
+# RunGscreend()
+pse_an <- readRDS(
+system.file("extdata", "gscreend_analysed_experiment.RData",
 package = "gscreend"))
-# pse is a poolscreen Experiment with two replicates R1 and R2
-pse_an <- RunGscreend(pse)
 plotModelParameters(pse_an)
 }
