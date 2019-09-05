@@ -1,7 +1,7 @@
 Package: gscreend
 Type: Package
 Title: Analysis of pooled genetic screens
-Version: 0.99.2
+Version: 0.99.3
 Author: Katharina Imkeller
 Maintainer: Katharina Imkeller <k.imkeller@dkfz.de>
 Description: Package for the analysis of pooled genetic screens (e.g. CRISPR-KO). The analysis of such screens is based on the comparison of gRNA abundances before and after a cell proliferation phase. The gscreend packages takes gRNA counts as input and allows detection of genes whose knockout decreases or increases cell proliferation.

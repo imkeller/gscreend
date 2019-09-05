@@ -102,10 +102,7 @@ plotModelParameters(pse_an)
 Essential genes results table
 
 ```{r}
-res_table <- data.frame(Name = rownames(assays(pse@GeneData)$fdr_neg),
-           fdr = assays(pse@GeneData)$fdr_neg, 
-           pval = as.numeric(assays(pse@GeneData)$pvalue_neg[,1]),
-           lfc = assays(pse@GeneData)$lfc)
+ResultsTable(pse_an, direction = "negative")
 ```
 
 

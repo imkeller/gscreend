@@ -44,3 +44,37 @@ plotModelParameters <- function(object) {
     plot(limits, parameters[,2], main = "Sd")
     plot(limits, parameters[,3], main = "Xi")
 }
+
+
+#' Extract a results table
+#'
+#' @param object  PoolScreenExp object
+#' @param direction Whether the table should contain information on positive or
+#' negative fold changes ["negative"| "positive"]
+#'
+#' @return plot
+#' @export
+#'
+#' @examples # import a PoolScreenExp object that has been generated using
+#' # RunGscreend()
+#' pse_an <- readRDS(
+#' system.file("extdata", "gscreend_analysed_experiment.RData",
+#' package = "gscreend"))
+#' ResultsTable(pse_an, direction = "negative")
+#'
+ResultsTable <- function(object, direction = "negative") {
+    if (direction == "negative") {
+    data.frame(Name = rownames(assays(object@GeneData)$fdr_neg),
+               fdr = assays(object@GeneData)$fdr_neg,
+               pval = as.numeric(assays(object@GeneData)$pvalue_neg[,1]),
+               lfc = assays(object@GeneData)$lfc)
+    } else if (direction == "positive") {
+        data.frame(Name = rownames(assays(object@GeneData)$fdr_pos),
+                   fdr = assays(object@GeneData)$fdr_pos,
+                   pval = as.numeric(assays(object@GeneData)$pvalue_pos[,1]),
+                   lfc = assays(object@GeneData)$lfc)
+    }
+    else {print(
+        paste(direction, "is not a valid argument.",
+              "Select positive or negative direction for results table."))}
+}

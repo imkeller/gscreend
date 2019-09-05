@@ -15,9 +15,3 @@ object
 \description{
 Normalize raw count
 }
-\examples{
-pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
-package = "gscreend"))
-# pse is a PoolScreenExp
-normalizePoolScreenExp(pse)
-}

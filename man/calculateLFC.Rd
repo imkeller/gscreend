@@ -15,10 +15,3 @@ object
 \description{
 Calculate log fold changes
 }
-\examples{
-pse <- readRDS(system.file("extdata", "gscreend_experiment.RData",
-package = "gscreend"))
-# pse is a of PoolScreenExp class
-norm_pse <- normalizePoolScreenExp(pse)
-calculateLFC(norm_pse)
-}
