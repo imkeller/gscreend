@@ -19,6 +19,7 @@ makeRhoNull <- function(n, p, nperm, n_cores) {
         alphaBeta(p_test)
         # number of cores defined in the input function
     }, mc.cores = n_cores)
+    unlist(rhonull)
 }
 
 #' @import methods
@@ -30,26 +31,32 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
     score_vals[!cut.pvals ] <- 1
 
     # calculate rho for every count gene
-    rho <- unsplit(sapply(split(score_vals, genes), alphaBeta), genes)
+    rho <- unsplit(vapply(split(score_vals, genes),
+                          FUN = alphaBeta,
+                          # vapply() needs FUN.VALUE vector as a template for return value
+                          FUN.VALUE = numeric(1)),
+                   genes)
 
     guides_per_gene <- sort(unique(table(genes)))
 
     # store this as model parameter
     permutations=10 * nrow(unique(genes))
 
-    rho_nullh <- parallel::mclapply(guides_per_gene,
-                        makeRhoNull,
-                        score_vals,
-                        permutations, n_cores,
-                        # number of cores defined in the input function
-                        mc.cores=n_cores)
+    # this does not need to be parallelized because its calling a function
+    # that is already serialized
+    rho_nullh <- vapply(guides_per_gene,
+                                    FUN = makeRhoNull,
+                                    p = score_vals,
+                                    nperm = permutations,
+                         n_cores = n_cores,
+                         FUN.VALUE = numeric(permutations))
 
     # Split by gene, make comparison with null model from makeRhoNull,
     # and unsplit by gene
+
     pvalue_gene <- parallel::mclapply(split(rho, genes), function(x) {
         n_sgrnas = length(x)
-        mean(rho_nullh[
-            guides_per_gene == n_sgrnas][[1]] <= x[[1]])
+        mean(rho_nullh[, guides_per_gene == n_sgrnas] <= x[[1]])
     }, mc.cores= n_cores)
 
     pvalue_gene
@@ -58,7 +65,9 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
 
 calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
     # Gena LFC : mean LFC of sgRNAs
-    sapply(split(lfcs_sgRNAs, genes), mean)
+    vapply(split(lfcs_sgRNAs, genes),
+           FUN = mean,
+           FUN.VALUE = numeric(1))
 }
 
 #' Calculate gene rank
