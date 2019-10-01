@@ -13,11 +13,10 @@ alphaBeta <- function(p_test) {
 
 # calculate rho value
 makeRhoNull <- function(n, p, nperm, n_cores) {
-    rhonull <- parallel::mclapply(seq_len(nperm), function(x) {
+    rhonull <- BiocParallel::bplapply(seq_len(nperm), function(x) {
         p_test <- sort.int(sample(p, n, replace = FALSE))
         alphaBeta(p_test)
-        # number of cores defined in the input function
-    }, mc.cores = n_cores)
+    })
     unlist(rhonull)
 }
 
@@ -52,10 +51,10 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
     # Split by gene, make comparison with null model
     # from makeRhoNull, and unsplit by gene
 
-    pvalue_gene <- parallel::mclapply(split(rho, genes), function(x) {
+    pvalue_gene <- BiocParallel::bplapply(split(rho, genes), function(x) {
         n_sgrnas = length(x)
         mean(rho_nullh[, guides_per_gene == n_sgrnas] <= x[[1]])
-    }, mc.cores = n_cores)
+    })
 
     pvalue_gene
 }

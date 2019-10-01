@@ -18,10 +18,10 @@ library(SummarizedExperiment)
 
 # Introduction
 
-Pooled CRISPR perturbations screens employ a library of guide RNAs that 
+Pooled CRISPR perturbations screens employ a library of guide RNAs (gRNAs) that 
 is transduced into a pool of cells with the aim to induce a single genetic 
 perturbation in each cell. The perturbation effect is assessed by 
-measuring the abunndance of each gRNA after the screen selection 
+measuring the abundance of each gRNA after the screen selection 
 phase and comparing it to its abundance in the plasmid library. 
 The main goal of the following analysis is the detection of 
 essential genes, i.e. genes whose knockout reduces the cell fitness. 
@@ -30,16 +30,16 @@ The package gscreend provides a method to rank genes based on count tables.
 # gscreend workflow
 
 In order to identify essential genes starting from raw gRNA count data,
-gscreend performs the following analsysis steps:
-1. Input of raw gRNA counts at T0 (seuqencing of library) 
+gscreend performs the following analysis steps:
+1. Input of raw gRNA counts at T0 (sequencing of library) 
 and T1 (at the end of the screen). Normalization and 
 calculation of log fold changes.
 2. Split log fold changes into intervals dependent on the 
 initial count at T0.
-3. For every interval fit a skew-normal distibution to the 
+3. For every interval fit a skew-normal distribution to the 
 data to model the null hypothesis (via least quantile regression).
-4. Based on the null model calculate p-values for every sgRNA.
-5. Rank sgRNAs according to p-value and perform robust ranking 
+4. Based on the null model calculate p-values for every gRNA.
+5. Rank gRNAs according to p-value and perform robust ranking 
 aggregation to calculate p-values on gene level.
 6. Perform quality control of data and statistical model.
 
@@ -49,16 +49,16 @@ devtools::install_github("imkeller/gscreend")
 
 # Analysis of simulated data with gscreend
 
-## Input data: sgRNA counts
+## Input data: gRNA counts
 
 The simulated data used in this example has been generated 
-using ths simulation method available at 
+using the simulation method available at 
 https://github.com/imkeller/simulate_pooled_screen
 
-Raw count data consists of gRNA counts in the libary sequencing 
+Raw count data consists of gRNA counts in the library sequencing 
 and different replicates after the screen proliferation phase.
-In order to estimate the effect of a specific guide RNA
-on cell fitness, the relative abundances of the guide RNA
+In order to estimate the effect of a specific gRNA
+on cell fitness, the relative abundances of the gRNA
 before and after the proliferation phase will be compares
 
 ```{r}
@@ -67,12 +67,12 @@ raw_counts <- read.table(
     header=TRUE)
 ```
 
-Generate a summarized experiment fromt the count data.
+Generate a summarized experiment from the count data.
 gscreend currently uses SummarizedExperiment objects as
 an input format.
 
-The count matrix contains raw guide RNA counts.
-Each row represents one guide RNA, each column
+The count matrix contains raw gRNA counts.
+Each row represents one gRNA, each column
 represents one sample (T0, T1, replicates, ...).
 ```{r}
 counts_matrix <- cbind(raw_counts$library0, 

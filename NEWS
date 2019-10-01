@@ -1,5 +1,9 @@
 NEWS for gscreend package
 
-CHANGES IN VERSION 1.0.0
-------------------------
+CHANGES IN VERSION 0.99.4
+--------------------------
+
+    - Replaced parallel::mclapply() with BiocParallel::bplapply()
+    
+    - Updated stop/warning/message functions.
 
