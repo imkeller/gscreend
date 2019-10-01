@@ -4,14 +4,12 @@
 \alias{assignGeneData}
 \title{Calculate gene rank}
 \usage{
-assignGeneData(object, alpha_cutoff, n_cores)
+assignGeneData(object, alpha_cutoff)
 }
 \arguments{
 \item{object}{PoolScreenExp object}
 
 \item{alpha_cutoff}{alpha cutoff for alpha-RRA (default: 0.05)}
-
-\item{n_cores}{number of cores to be used (default: 1)}
 }
 \value{
 object

@@ -7,7 +7,6 @@
 #' @param quant2 upper quantile for least quantile of squares regression
 #' (default: 0.9)
 #' @param alphacutoff alpha cutoff for alpha-RRA (default: 0.05)
-#' @param n_cores number of cores to be used (default: 1)
 #'
 #' @return object
 #' @export
@@ -39,7 +38,7 @@
 
 RunGscreend <- function(object,
                         quant1 = 0.1, quant2 = 0.9,
-                        alphacutoff = 0.05, n_cores = 1) {
+                        alphacutoff = 0.05) {
     # normalize
     norm_pse <- normalizePoolScreenExp(object)
     # calculate fold changes
@@ -50,5 +49,5 @@ RunGscreend <- function(object,
     # pvalues and rank sgRNAs
     pval_pse <- calculatePValues(fit_pse)
     # rank genes
-    assignGeneData(pval_pse, alphacutoff, n_cores)
+    assignGeneData(pval_pse, alphacutoff)
 }

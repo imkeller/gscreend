@@ -4,8 +4,7 @@
 \alias{RunGscreend}
 \title{run gscreend}
 \usage{
-RunGscreend(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05,
-  n_cores = 1)
+RunGscreend(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05)
 }
 \arguments{
 \item{object}{PoolScreenExp object}
@@ -17,8 +16,6 @@ RunGscreend(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05,
 (default: 0.9)}
 
 \item{alphacutoff}{alpha cutoff for alpha-RRA (default: 0.05)}
-
-\item{n_cores}{number of cores to be used (default: 1)}
 }
 \value{
 object

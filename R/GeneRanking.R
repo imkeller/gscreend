@@ -12,7 +12,7 @@ alphaBeta <- function(p_test) {
 }
 
 # calculate rho value
-makeRhoNull <- function(n, p, nperm, n_cores) {
+makeRhoNull <- function(n, p, nperm) {
     rhonull <- BiocParallel::bplapply(seq_len(nperm), function(x) {
         p_test <- sort.int(sample(p, n, replace = FALSE))
         alphaBeta(p_test)
@@ -22,7 +22,7 @@ makeRhoNull <- function(n, p, nperm, n_cores) {
 
 #' @import methods
 #'
-calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
+calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     cut.pvals <- pvals <= alpha_cutoff
     # ranking and scoring according to pvalues
     score_vals <- rank(pvals)/length(pvals)
@@ -45,7 +45,6 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
                         FUN = makeRhoNull,
                         p = score_vals,
                         nperm = permutations,
-                        n_cores = n_cores,
                         FUN.VALUE = numeric(permutations))
 
     # Split by gene, make comparison with null model
@@ -69,12 +68,11 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #'
 #' @param object PoolScreenExp object
 #' @param alpha_cutoff alpha cutoff for alpha-RRA (default: 0.05)
-#' @param n_cores number of cores to be used (default: 1)
 #'
 #' @return object
 #'
 
-assignGeneData <- function(object, alpha_cutoff, n_cores) {
+assignGeneData <- function(object, alpha_cutoff) {
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
     # p-values for pos LFC: 1 - neg.pval
@@ -87,8 +85,8 @@ assignGeneData <- function(object, alpha_cutoff, n_cores) {
                         simplify = FALSE))
 
     # calculate pvalues
-    gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff, n_cores)
-    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff, n_cores)
+    gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)
+    gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff)
 
     # calculate fdrs from pvalues
     fdr_gene_neg <- stats::p.adjust(gene_pval_neg, method = "fdr")

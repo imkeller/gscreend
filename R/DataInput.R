@@ -33,9 +33,8 @@ createPoolScreenExp <- function(data) {
         object <- createPoolScreenExpFromSE(data)
     } else {
         message(
-            paste("Error: input data is not of the suported input format:",
+            "Error: input data is not of the suported input format: ",
             "SummarizedExperiment.")
-            )
     }
     object
 }
