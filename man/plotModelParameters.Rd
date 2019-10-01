@@ -19,7 +19,7 @@ Plot model parameters from the fitting
 # import a PoolScreenExp object that has been generated using
 # RunGscreend()
 pse_an <- readRDS(
-system.file("extdata", "gscreend_analysed_experiment.RData",
-package = "gscreend"))
+system.file('extdata', 'gscreend_analysed_experiment.RData',
+package = 'gscreend'))
 plotModelParameters(pse_an)
 }

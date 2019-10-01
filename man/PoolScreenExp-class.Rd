@@ -6,25 +6,27 @@
 \title{Class to store pooled CRISPR screening experiment}
 \description{
 The \code{poolScreenExp} class is an S4 class used to store
-sgRNA and gene related data as well as parameters necessary for statistical
-model.
+sgRNA and gene related data as well as parameters necessary
+for statistical model.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{sgRNAData}}{A SummarizedExperiment containing the data related to sgRNAs.}
+\item{\code{sgRNAData}}{A SummarizedExperiment containing
+the data related to sgRNAs.}
 
-\item{\code{FittingIntervals}}{A vector defining the limits of the intervals used
-for fitting of null model.}
+\item{\code{FittingIntervals}}{A vector defining the limits of the
+intervals used for fitting of null model.}
 
-\item{\code{LFCModelParameters}}{A vector of parameters estimated when fitting the
-null model.}
+\item{\code{LFCModelParameters}}{A vector of parameters estimated
+when fitting the null model.}
 
-\item{\code{GeneData}}{SummarizedExperiment containing the data related to genes.}
+\item{\code{GeneData}}{SummarizedExperiment containing the
+data related to genes.}
 
 \item{\code{FittingOptions}}{A named list with options for fitting:
-IntervalFraction - fraction of sgRNAs used in every fitting interval
-(default 0.1),
+IntervalFraction - fraction of sgRNAs used in every
+fitting interval (default 0.1),
 alphaCutoff - alpha cutoff for alpha RRA algorithm (default: 0.05).}
 }}
 

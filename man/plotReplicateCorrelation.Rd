@@ -22,8 +22,8 @@ Plot replicate correlation
 \examples{
 # import a PoolScreenExp object that has been generated using RunGscreend()
 pse_an <- readRDS(
-system.file("extdata", "gscreend_analysed_experiment.RData",
-package = "gscreend"))
-plotReplicateCorrelation(pse_an, rep1 = "R1", rep2 = "R2")
+system.file('extdata', 'gscreend_analysed_experiment.RData',
+package = 'gscreend'))
+plotReplicateCorrelation(pse_an, rep1 = 'R1', rep2 = 'R2')
 
 }

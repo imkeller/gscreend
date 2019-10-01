@@ -21,6 +21,8 @@ normalizePoolScreenExp <- function(object) {
 #'
 calculateLFC <- function(object) {
     sgRNAse <- object@sgRNAData
-    assays(object@sgRNAData)$lfc <- log2((normcounts(object) + 1)/(refcounts(object)[, 1] + 1))
+    assays(object@sgRNAData)$lfc <-log2(
+        (normcounts(object) + 1)/(refcounts(object)[, 1] + 1)
+        )
     object
 }

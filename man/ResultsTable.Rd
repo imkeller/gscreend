@@ -10,7 +10,7 @@ ResultsTable(object, direction = "negative")
 \item{object}{PoolScreenExp object}
 
 \item{direction}{Whether the table should contain information on positive or
-negative fold changes ["negative"| "positive"]}
+negative fold changes ['negative'| 'positive']}
 }
 \value{
 plot
@@ -22,8 +22,8 @@ Extract a results table
 # import a PoolScreenExp object that has been generated using
 # RunGscreend()
 pse_an <- readRDS(
-system.file("extdata", "gscreend_analysed_experiment.RData",
-package = "gscreend"))
-ResultsTable(pse_an, direction = "negative")
+system.file('extdata', 'gscreend_analysed_experiment.RData',
+package = 'gscreend'))
+ResultsTable(pse_an, direction = 'negative')
 
 }

@@ -1,14 +1,14 @@
 ---
-title: "Vignette illustrating the usage of gscreend on data from pooled CRISPR screens"
+title: "Vignette illustrating the usage of gscreend on simulated data"
 author: "Katharina Imkeller"
 date: "`r Sys.Date()`"
 output:
-  BiocStyle::html_document:
+    BiocStyle::html_document:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Example_simulated}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{Example_simulated}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}
@@ -18,16 +18,29 @@ library(SummarizedExperiment)
 
 # Introduction
 
-Pooled CRISPR perturbations screens employ a library of guide RNAs that is transduced into a pool of cells with the aim to induce a single genetic perturbation in each cell. The perturbation effect is assessed by measuring the abunndance of each gRNA after the screen selection phase and comparing it to its abundance in the plasmid library. The main goal of the following analysis is the detection of essential genes, i.e. genes whose knockout reduces the cell fitness. The package gscreend provides a method to rank genes based on count tables.
+Pooled CRISPR perturbations screens employ a library of guide RNAs that 
+is transduced into a pool of cells with the aim to induce a single genetic 
+perturbation in each cell. The perturbation effect is assessed by 
+measuring the abunndance of each gRNA after the screen selection 
+phase and comparing it to its abundance in the plasmid library. 
+The main goal of the following analysis is the detection of 
+essential genes, i.e. genes whose knockout reduces the cell fitness. 
+The package gscreend provides a method to rank genes based on count tables.
 
 # gscreend workflow
 
-In order to identify essential genes starting from raw gRNA count data, gscreend performs the following analsysis steps:
-1. Input of raw gRNA counts at T0 (seuqencing of library) and T1 (at the end of the screen). Normalization and calculation of log fold changes.
-2. Split log fold changes into intervals dependent on the initial count at T0.
-3. For every interval fit a skew-normal distibution to the data to model the null hypothesis (via least quantile regression).
+In order to identify essential genes starting from raw gRNA count data,
+gscreend performs the following analsysis steps:
+1. Input of raw gRNA counts at T0 (seuqencing of library) 
+and T1 (at the end of the screen). Normalization and 
+calculation of log fold changes.
+2. Split log fold changes into intervals dependent on the 
+initial count at T0.
+3. For every interval fit a skew-normal distibution to the 
+data to model the null hypothesis (via least quantile regression).
 4. Based on the null model calculate p-values for every sgRNA.
-5. Rank sgRNAs according to p-value and perform robust ranking aggregation to calculate p-values on gene level.
+5. Rank sgRNAs according to p-value and perform robust ranking 
+aggregation to calculate p-values on gene level.
 6. Perform quality control of data and statistical model.
 
 # Installation
@@ -38,39 +51,44 @@ devtools::install_github("imkeller/gscreend")
 
 ## Input data: sgRNA counts
 
-The simulated data used in this example has been generated using ths simulation method available at https://github.com/imkeller/simulate_pooled_screen
+The simulated data used in this example has been generated 
+using ths simulation method available at 
+https://github.com/imkeller/simulate_pooled_screen
 
-!! Update in order to take simulated counts direclty from the package!
-
-Raw count data consists of gRNA counts in the libary sequencing and different replicates after XXX days.
+Raw count data consists of gRNA counts in the libary sequencing 
+and different replicates after the screen proliferation phase.
 
 ```{r}
 raw_counts <- read.table(
-                         system.file("extdata", "simulated_counts.txt", package = "gscreend"),
-                         header=TRUE)
+    system.file("extdata", "simulated_counts.txt", package = "gscreend"),
+    header=TRUE)
 ```
 
 Generate a summarized experiment fromt the count data
 
 ```{r}
-counts_matrix <- cbind(raw_counts$library0, raw_counts$R0_0, raw_counts$R1_0)
+counts_matrix <- cbind(raw_counts$library0, 
+                        raw_counts$R0_0, 
+                        raw_counts$R1_0)
 
 rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
-                           gene = raw_counts$Gene)
+                    gene = raw_counts$Gene)
 
 colData <- data.frame(samplename = c("library", "R1", "R2"),
-                      # timepoint naming convention: 
-                      # T0 -> reference, 
-                      # T1 -> selected
-                      timepoint = c("T0", "T1", "T1"))
+                    # timepoint naming convention: 
+                    # T0 -> reference, 
+                    # T1 -> selected
+                    timepoint = c("T0", "T1", "T1"))
 
 se <- SummarizedExperiment(assays=list(counts=counts_matrix),
-                        rowData=rowData, colData=colData)
+                    rowData=rowData, colData=colData)
 ```
 
 ## Run gscreend
 
-In this step a gscreend experiment object is generated that will after the analysis contain all data related to gRNAs, genes and model parameters.
+In this step a gscreend experiment object is generated that 
+will after the analysis contain all data related to gRNAs, 
+genes and model parameters.
 
 ```{r}
 pse <- createPoolScreenExp(se)
@@ -85,13 +103,14 @@ pse_an <- RunGscreend(pse, 0.1, 0.9, 0.1)
 
 ## Quality control
 
-gscreend provides basic quality control functions for inspection of replicate correlation for example.
+gscreend provides basic quality control functions for inspection 
+of replicate correlation for example.
 
 ```{r}
 plotReplicateCorrelation(pse_an)
 ```
 
-Model parameters
+Model parameters from fit.
 
 ```{r}
 plotModelParameters(pse_an) 
