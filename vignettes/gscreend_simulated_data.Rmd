@@ -57,6 +57,9 @@ https://github.com/imkeller/simulate_pooled_screen
 
 Raw count data consists of gRNA counts in the libary sequencing 
 and different replicates after the screen proliferation phase.
+In order to estimate the effect of a specific guide RNA
+on cell fitness, the relative abundances of the guide RNA
+before and after the proliferation phase will be compares
 
 ```{r}
 raw_counts <- read.table(
@@ -64,8 +67,13 @@ raw_counts <- read.table(
     header=TRUE)
 ```
 
-Generate a summarized experiment fromt the count data
+Generate a summarized experiment fromt the count data.
+gscreend currently uses SummarizedExperiment objects as
+an input format.
 
+The count matrix contains raw guide RNA counts.
+Each row represents one guide RNA, each column
+represents one sample (T0, T1, replicates, ...).
 ```{r}
 counts_matrix <- cbind(raw_counts$library0, 
                         raw_counts$R0_0, 
@@ -77,7 +85,7 @@ rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
 colData <- data.frame(samplename = c("library", "R1", "R2"),
                     # timepoint naming convention: 
                     # T0 -> reference, 
-                    # T1 -> selected
+                    # T1 -> after proliferation
                     timepoint = c("T0", "T1", "T1"))
 
 se <- SummarizedExperiment(assays=list(counts=counts_matrix),
@@ -94,10 +102,10 @@ genes and model parameters.
 pse <- createPoolScreenExp(se)
 ```
 
-Run gscreend
+Run gscreend with default parameters.
 
 ```{r}
-pse_an <- RunGscreend(pse, 0.1, 0.9, 0.1)
+pse_an <- RunGscreend(pse)
 
 ```
 
@@ -110,7 +118,9 @@ of replicate correlation for example.
 plotReplicateCorrelation(pse_an)
 ```
 
-Model parameters from fit.
+The plotModelParameters() function can be used to inspect
+the values of the parameters estimated for the
+skew normal distribution of the logarithmic fold change data.
 
 ```{r}
 plotModelParameters(pse_an) 
@@ -118,7 +128,11 @@ plotModelParameters(pse_an)
 
 # Results
 
-Essential genes results table
+The ResultsTable function can be used to extract a table listing 
+for each gene the p-value and fdr. These values correspond to 
+the results from the statistical test indicting whether
+upon perturbation a specific gene reduces (direction = "negative"), or
+increasing (direction = "positive") cell viability.
 
 ```{r}
 ResultsTable(pse_an, direction = "negative")
