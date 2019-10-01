@@ -1,7 +1,6 @@
-# This method is adapted from Li et al. and others
-# But I have to write it from scratch because there is no
-# available R package (only one on github, but this would be to difficult to
-# install)
+# This method is adapted from Li et al. and others But I have to write it from scratch
+# because there is no available R package (only one on github, but this would be to
+# difficult to install)
 
 # helper functions, according to definition in Li et al.
 # probability needs to be transformed by beta distribution
@@ -9,9 +8,7 @@
 alphaBeta <- function(p_test) {
     p_test <- sort(p_test)
     n <- length(p_test)
-    return(min(stats::pbeta(p_test,
-                            seq_len(n),
-                            n - seq_len(n) + 1)))
+    return(min(stats::pbeta(p_test, seq_len(n), n - seq_len(n) + 1)))
 }
 
 # calculate rho value
@@ -29,37 +26,31 @@ makeRhoNull <- function(n, p, nperm, n_cores) {
 calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
     cut.pvals <- pvals <= alpha_cutoff
     # ranking and scoring according to pvalues
-    score_vals <- rank(pvals) / length(pvals)
-    score_vals[!cut.pvals ] <- 1
+    score_vals <- rank(pvals)/length(pvals)
+    score_vals[!cut.pvals] <- 1
 
     # calculate rho for every count gene
-    rho <- unsplit(vapply(split(score_vals, genes),
-                          FUN = alphaBeta,
-                          # vapply() needs FUN.VALUE vector as a template for return value
-                          FUN.VALUE = numeric(1)),
-                   genes)
+    rho <- unsplit(vapply(split(score_vals, genes), FUN = alphaBeta, FUN.VALUE = numeric(1)), genes)
 
     guides_per_gene <- sort(unique(table(genes)))
 
     # store this as model parameter
-    permutations=10 * nrow(unique(genes))
+    permutations = 10 * nrow(unique(genes))
 
-    # this does not need to be parallelized because its calling a function
-    # that is already serialized
+    # this does not need to be parallelized because its calling a function that is already serialized
     rho_nullh <- vapply(guides_per_gene,
-                                    FUN = makeRhoNull,
-                                    p = score_vals,
-                                    nperm = permutations,
-                         n_cores = n_cores,
-                         FUN.VALUE = numeric(permutations))
+                        FUN = makeRhoNull,
+                        p = score_vals,
+                        nperm = permutations,
+                        n_cores = n_cores,
+                        FUN.VALUE = numeric(permutations))
 
-    # Split by gene, make comparison with null model from makeRhoNull,
-    # and unsplit by gene
+    # Split by gene, make comparison with null model from makeRhoNull, and unsplit by gene
 
     pvalue_gene <- parallel::mclapply(split(rho, genes), function(x) {
         n_sgrnas = length(x)
         mean(rho_nullh[, guides_per_gene == n_sgrnas] <= x[[1]])
-    }, mc.cores= n_cores)
+    }, mc.cores = n_cores)
 
     pvalue_gene
 }
@@ -67,9 +58,7 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff, n_cores) {
 
 calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
     # Gena LFC : mean LFC of sgRNAs
-    vapply(split(lfcs_sgRNAs, genes),
-           FUN = mean,
-           FUN.VALUE = numeric(1))
+    vapply(split(lfcs_sgRNAs, genes), FUN = mean, FUN.VALUE = numeric(1))
 }
 
 #' Calculate gene rank
@@ -89,11 +78,8 @@ assignGeneData <- function(object, alpha_cutoff, n_cores) {
 
     # genes (append gene list as many times as replicates)
     n_repl <- dim(pvals_neg)[2]
-    genes <- do.call("rbind",
-                     replicate(n_repl,
-                               data.frame(gene =
-                                              rowData(object@sgRNAData)$gene),
-                               simplify = FALSE))
+    genes <- do.call("rbind", replicate(n_repl,
+                                        data.frame(gene = rowData(object@sgRNAData)$gene), simplify = FALSE))
 
     # calculate pvalues
     gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff, n_cores)
@@ -107,21 +93,17 @@ assignGeneData <- function(object, alpha_cutoff, n_cores) {
     lfcs_sgRNAs <- samplelfc(object)
     gene_lfc <- calculateGeneLFC(lfcs_sgRNAs, genes)
 
-    # build new summarized experiment for the GeneData slot
-    # assuming that gene order is same in neg and pos
+    # build new summarized experiment for the GeneData slot assuming that gene order is same in neg and pos
     rowData <- data.frame(gene = names(gene_pval_neg))
-    colData <- data.frame(samplename = c("T1"),
-                          timepoint = c("T1"))
+    colData <- data.frame(samplename = c("T1"), timepoint = c("T1"))
 
     # build a summarized experiment that contains p values and fdrs
-    object@GeneData <- SummarizedExperiment(assays=list(
-                                     pvalue_neg = as.matrix(gene_pval_neg),
-                                     fdr_neg = as.matrix(fdr_gene_neg),
-                                     pvalue_pos = as.matrix(gene_pval_pos),
-                                     fdr_pos = as.matrix(fdr_gene_pos),
-                                     lfc = as.matrix(gene_lfc)),
-                                     rowData=rowData, colData=colData)
+    object@GeneData <- SummarizedExperiment(assays = list(pvalue_neg = as.matrix(gene_pval_neg),
+                                                          fdr_neg = as.matrix(fdr_gene_neg),
+                                                          pvalue_pos = as.matrix(gene_pval_pos),
+                                                          fdr_pos = as.matrix(fdr_gene_pos),
+                                                          lfc = as.matrix(gene_lfc)),
+                                            rowData = rowData, colData = colData)
     object
 
 }
-

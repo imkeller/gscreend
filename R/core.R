@@ -14,8 +14,8 @@
 #'
 #'
 #' @examples raw_counts <- read.table(
-#'                         system.file("extdata", "simulated_counts.txt",
-#'                         package = "gscreend"),
+#'                         system.file('extdata', 'simulated_counts.txt',
+#'                         package = 'gscreend'),
 #'                         header=TRUE)
 #'
 #'# Create the PoolScreenExp to be analyzed
@@ -24,8 +24,8 @@
 #'rowData <- data.frame(sgRNA_id = raw_counts$sgrna_id,
 #'                      gene = raw_counts$Gene)
 #'
-#'colData <- data.frame(samplename = c("library", "R1", "R2"),
-#'                      timepoint = c("T0", "T1", "T1"))
+#'colData <- data.frame(samplename = c('library', 'R1', 'R2'),
+#'                      timepoint = c('T0', 'T1', 'T1'))
 #'
 #'library(SummarizedExperiment)
 #'se <- SummarizedExperiment(assays=list(counts=counts_matrix),
@@ -37,18 +37,13 @@
 #'pse_an <- RunGscreend(pse)
 #'
 
-RunGscreend <- function(object,
-                          quant1 = 0.1,
-                          quant2 = 0.9,
-                          alphacutoff = 0.05,
-                          n_cores=1) {
+RunGscreend <- function(object, quant1 = 0.1, quant2 = 0.9, alphacutoff = 0.05, n_cores = 1) {
     # normalize
     norm_pse <- normalizePoolScreenExp(object)
     # calculate fold changes
     lfc_pse <- calculateLFC(norm_pse)
     # sgRNA fitting
-    fit_pse <- calculateIntervalFits(defineFittingIntervals(lfc_pse),
-                          quant1, quant2)
+    fit_pse <- calculateIntervalFits(defineFittingIntervals(lfc_pse), quant1, quant2)
     # pvalues and rank sgRNAs
     pval_pse <- calculatePValues(fit_pse)
     # rank genes
