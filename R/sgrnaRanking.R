@@ -81,6 +81,7 @@ calculateIntervalFits <- function(object, quant1, quant2) {
         fits[i, ] <- fit_least_quantile(lfc_subset, quant1, quant2)$par
     }
     object@LFCModelParameters <- fits
+    message("Fitted null distribution.")
     object
 }
 
@@ -116,5 +117,6 @@ calculatePValues <- function(object) {
                                     fits[i, 1], fits[i, 2], fits[i, 3])
     }
 
+    message("Calculated p-values at gRNA level.")
     object
 }

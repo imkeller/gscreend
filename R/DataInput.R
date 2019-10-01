@@ -47,6 +47,21 @@ createPoolScreenExp <- function(data) {
 #'
 createPoolScreenExpFromSE <- function(data) {
     object <- new("PoolScreenExp")
+
+    # Check whether reference and sample are named correctly
+    checksum_ref <- sum(data$timepoint == "T0")
+    checksum_sample <- sum(data$timepoint == "T1")
+    if (checksum_ref != 1) {
+        stop("gscreend is currently only implemented",
+             "for usage of one reference (T0).",
+             "You are using ", checksum_ref, " references.")
+    } else if (checksum_sample < 1) {
+        stop("There is no sample T1.")
+    } else if (checksum_sample + checksum_ref !=  length(data$timepoint)) {
+        stop("Timepoints can be named T0 or T1 only.",
+             "One or more of your timepoints is names differently.")
+    } else {message("References and samples are named correctly.")}
+
     object@sgRNAData <- data
     object@FittingOptions <- list(IntervalFraction = 0.1)
     object

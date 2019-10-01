@@ -10,6 +10,7 @@ normalizePoolScreenExp <- function(object) {
     maxfact <- max(sizefactors)
     # want to divide each row of matrix by vector elements.  only works with t()
     normcounts(object) <- t(t(assays(sgRNAse)$counts)/sizefactors) * maxfact
+    message("Size normalized count data.")
     object
 }
 
@@ -24,5 +25,6 @@ calculateLFC <- function(object) {
     assays(object@sgRNAData)$lfc <-log2(
         (normcounts(object) + 1)/(refcounts(object)[, 1] + 1)
         )
+    message("Calculated LFC.")
     object
 }

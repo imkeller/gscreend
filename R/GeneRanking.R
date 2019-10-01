@@ -1,4 +1,4 @@
-# This method is adapted from Li et al. and others But I have
+# This method is adapted from Li et al. and others. But I have
 # to write it from scratch because there is no available R package
 # on CRAN or Bioconductor
 
@@ -73,6 +73,7 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #'
 
 assignGeneData <- function(object, alpha_cutoff) {
+    message("Ranking genes...")
     # p-values for neg LFC were calculated from model
     pvals_neg <- samplepval(object)
     # p-values for pos LFC: 1 - neg.pval
@@ -109,6 +110,8 @@ assignGeneData <- function(object, alpha_cutoff) {
             fdr_pos = as.matrix(fdr_gene_pos),
             lfc = as.matrix(gene_lfc)),
         rowData = rowData, colData = colData)
+
+    message("gscreend analysis has been completed.")
     object
 
 }
