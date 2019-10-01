@@ -9,12 +9,14 @@
 alphaBeta <- function(p_test) {
     p_test <- sort(p_test)
     n <- length(p_test)
-    return(min(stats::pbeta(p_test, 1:n, n - (1:n) + 1)))
+    return(min(stats::pbeta(p_test,
+                            seq_len(n),
+                            n - seq_len(n) + 1)))
 }
 
 # calculate rho value
 makeRhoNull <- function(n, p, nperm, n_cores) {
-    parallel::mclapply(1:nperm, function(x) {
+    parallel::mclapply(seq_len(nperm), function(x) {
         p_test <- sort.int(sample(p, n, replace = FALSE))
         alphaBeta(p_test)
         # number of cores defined in the input function

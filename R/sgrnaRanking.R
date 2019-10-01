@@ -75,7 +75,7 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 
     # for every count, determine lower interval limit
     fits <- matrix(nrow = (length(limits)-1), ncol=3)
-    for (i in 1:(length(limits)-1)) {
+    for (i in seq_len(length(limits)-1)) {
         lfc_subset <- lfc_for_fit[refcount_mask > limits[i] &
                                   refcount_mask < limits[i+1]]
         fits[i, ] <- fit_least_quantile(lfc_subset, quant1, quant2)$par
@@ -102,7 +102,7 @@ calculatePValues <- function(object) {
     fits <- object@LFCModelParameters
     limits <- object@FittingIntervals
 
-    for (i in 1:(length(limits)-1)) {
+    for (i in seq_len(length(limits)-1)) {
         # subset data according to count at T0
         mask <- refcounts(object) >= limits[i] &
                 refcounts(object) < limits[i+1]

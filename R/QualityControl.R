@@ -37,7 +37,7 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
 #' plotModelParameters(pse_an)
 plotModelParameters <- function(object) {
     limits <- object@FittingIntervals
-    limits <- limits[1:length(limits) - 1]
+    limits <- limits[seq_len(length(limits)) - 1]
     parameters <- object@LFCModelParameters
     graphics::par(mfrow=c(2,2))
     plot(limits, parameters[,1], main = "Mean")
