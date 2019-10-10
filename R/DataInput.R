@@ -67,6 +67,6 @@ createPoolScreenExpFromSE <- function(data) {
     } else {message("References and samples are named correctly.")}
 
     sgRNAData(object) <- data
-    object@FittingOptions <- list(IntervalFraction = 0.1)
+    FittingOptions(object) <- list(IntervalFraction = 0.1)
     object
 }

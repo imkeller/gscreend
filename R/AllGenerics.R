@@ -6,6 +6,24 @@ setGeneric("sgRNAData<-", function(x, value) standardGeneric("sgRNAData<-"))
 setGeneric("GeneData", function(x) standardGeneric("GeneData"))
 setGeneric("GeneData<-", function(x, value) standardGeneric("GeneData<-"))
 
+# FittingOptions slot
+setGeneric("FittingOptions",
+           function(x) standardGeneric("FittingOptions"))
+setGeneric("FittingOptions<-",
+           function(x, value) standardGeneric("FittingOptions<-"))
+
+# FittingIntervals slot
+setGeneric("FittingIntervals",
+           function(x) standardGeneric("FittingIntervals"))
+setGeneric("FittingIntervals<-",
+           function(x, value) standardGeneric("FittingIntervals<-"))
+
+# LFCModelParameters slot
+setGeneric("LFCModelParameters",
+           function(x) standardGeneric("LFCModelParameters"))
+setGeneric("LFCModelParameters<-",
+           function(x, value) standardGeneric("LFCModelParameters<-"))
+
 # set and get normalized counts
 setGeneric("normcounts", function(x) standardGeneric("normcounts"))
 setGeneric("normcounts<-", function(x, value) standardGeneric("normcounts<-"))

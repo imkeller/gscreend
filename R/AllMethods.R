@@ -30,6 +30,49 @@ setMethod("GeneData<-", "PoolScreenExp", function(x, value) {
     x
 })
 
+# Fitting options slot
+setMethod("FittingOptions", "PoolScreenExp", function(x) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    se <- x@FittingOptions
+    se
+})
+setMethod("FittingOptions<-", "PoolScreenExp", function(x, value) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    x@FittingOptions <- value
+    x
+})
+
+# Fitting intervals slot
+setMethod("FittingIntervals", "PoolScreenExp", function(x) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    se <- x@FittingIntervals
+    se
+})
+setMethod("FittingIntervals<-", "PoolScreenExp", function(x, value) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    x@FittingIntervals <- value
+    x
+})
+
+# slot containing fitted parameters
+setMethod("LFCModelParameters", "PoolScreenExp", function(x) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    se <- x@LFCModelParameters
+    se
+})
+setMethod("LFCModelParameters<-", "PoolScreenExp", function(x, value) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    x@LFCModelParameters <- value
+    x
+})
+
+
 setMethod("normcounts", "PoolScreenExp", function(x)
     assays(sgRNAData(x))$normcounts)
 

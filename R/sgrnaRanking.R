@@ -8,10 +8,10 @@ defineFittingIntervals <- function(object) {
     # split intervals based on library counts use 10% of data
     # (parameter set in the object creation function
     # createPoolScreenExpFromSE())
-    quantile_lims = seq(0, 1, object@FittingOptions$IntervalFraction)
+    quantile_lims = seq(0, 1, FittingOptions(object)$IntervalFraction)
     # use unique(): in case there are many 0 the first intervals are merged
     limits <- unique(stats::quantile(refcounts(object), quantile_lims))
-    object@FittingIntervals <- as.integer(limits)
+    FittingIntervals(object) <- as.integer(limits)
     object
 }
 
@@ -65,7 +65,7 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
 calculateIntervalFits <- function(object, quant1, quant2) {
     # one fit is done for every intervall because the skew is more important
     # for perturbaions with low initial counts
-    limits <- object@FittingIntervals
+    limits <- FittingIntervals(object)
 
     # split counts into intervals needs to be done based on reference counts !
     counts_for_fit <- as.vector(refcounts(object))
@@ -80,7 +80,7 @@ calculateIntervalFits <- function(object, quant1, quant2) {
                                     refcount_mask < limits[i + 1]]
         fits[i, ] <- fit_least_quantile(lfc_subset, quant1, quant2)$par
     }
-    object@LFCModelParameters <- fits
+    LFCModelParameters(object) <- fits
     message("Fitted null distribution.")
     object
 }
@@ -102,8 +102,8 @@ calculatePValues <- function(object) {
         nrow = dimensions[1], ncol = dimensions[2])
 
     # previously determined fits and corresponding lower count limits
-    fits <- object@LFCModelParameters
-    limits <- object@FittingIntervals
+    fits <- LFCModelParameters(object)
+    limits <- FittingIntervals(object)
 
     for (i in seq_len(length(limits) - 1)) {
         # subset data according to count at T0

@@ -37,9 +37,9 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
 #' package = 'gscreend'))
 #' plotModelParameters(pse_an)
 plotModelParameters <- function(object) {
-    limits <- object@FittingIntervals
+    limits <- FittingIntervals(object)
     limits <- limits[seq_len(length(limits)) - 1]
-    parameters <- object@LFCModelParameters
+    parameters <- LFCModelParameters(object)
     graphics::par(mfrow = c(2, 2))
     plot(limits, parameters[, 1], main = "Mean")
     plot(limits, parameters[, 2], main = "Sd")
