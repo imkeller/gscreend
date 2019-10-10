@@ -2,6 +2,10 @@
 setGeneric("sgRNAData", function(x) standardGeneric("sgRNAData"))
 setGeneric("sgRNAData<-", function(x, value) standardGeneric("sgRNAData<-"))
 
+# Gene slot
+setGeneric("GeneData", function(x) standardGeneric("GeneData"))
+setGeneric("GeneData<-", function(x, value) standardGeneric("GeneData<-"))
+
 # set and get normalized counts
 setGeneric("normcounts", function(x) standardGeneric("normcounts"))
 setGeneric("normcounts<-", function(x, value) standardGeneric("normcounts<-"))

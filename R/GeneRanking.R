@@ -102,7 +102,7 @@ assignGeneData <- function(object, alpha_cutoff) {
     colData <- data.frame(samplename = c("T1"), timepoint = c("T1"))
 
     # build a summarized experiment that contains p values and fdrs
-    object@GeneData <- SummarizedExperiment(
+    GeneData(object) <- SummarizedExperiment(
         assays = list(pvalue_neg = as.matrix(gene_pval_neg),
             fdr_neg = as.matrix(fdr_gene_neg),
             pvalue_pos = as.matrix(gene_pval_pos),

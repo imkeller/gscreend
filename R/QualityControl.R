@@ -65,15 +65,17 @@ plotModelParameters <- function(object) {
 #'
 ResultsTable <- function(object, direction = "negative") {
     if (direction == "negative") {
-        data.frame(Name = rownames(assays(object@GeneData)$fdr_neg),
-                    fdr = assays(object@GeneData)$fdr_neg,
-                    pval = as.numeric(assays(object@GeneData)$pvalue_neg[, 1]),
-                    lfc = assays(object@GeneData)$lfc)
+        genedataslot <- GeneData(object)
+        data.frame(Name = rownames(assays(genedataslot)$fdr_neg),
+                    fdr = assays(genedataslot)$fdr_neg,
+                    pval = as.numeric(assays(genedataslot)$pvalue_neg[, 1]),
+                    lfc = assays(genedataslot)$lfc)
     } else if (direction == "positive") {
-        data.frame(Name = rownames(assays(object@GeneData)$fdr_pos),
-                    fdr = assays(object@GeneData)$fdr_pos,
-                    pval = as.numeric(assays(object@GeneData)$pvalue_pos[, 1]),
-                    lfc = assays(object@GeneData)$lfc)
+        genedataslot <- GeneData(object)
+        data.frame(Name = rownames(assays(genedataslot)$fdr_pos),
+                    fdr = assays(genedataslot)$fdr_pos,
+                    pval = as.numeric(assays(genedataslot)$pvalue_pos[, 1]),
+                    lfc = assays(genedataslot)$lfc)
     } else {
         print(paste(direction, "is not a valid argument.",
                     "Select positive or negative direction for results table."))

@@ -14,6 +14,22 @@ setMethod("sgRNAData<-", "PoolScreenExp", function(x, value) {
     x
 })
 
+# Access the Gene slot
+setMethod("GeneData", "PoolScreenExp", function(x) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    se <- x@GeneData
+    se
+})
+
+# Write into the Gene slot
+setMethod("GeneData<-", "PoolScreenExp", function(x, value) {
+    # I assume I am allowed to use the
+    # direct slot access here, because there is no other way?
+    x@GeneData <- value
+    x
+})
+
 setMethod("normcounts", "PoolScreenExp", function(x)
     assays(sgRNAData(x))$normcounts)
 
