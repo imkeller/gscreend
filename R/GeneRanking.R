@@ -8,7 +8,7 @@
 alphaBeta <- function(p_test) {
     p_test <- sort(p_test)
     n <- length(p_test)
-    return(min(stats::pbeta(p_test, seq_len(n), n - seq_len(n) + 1)))
+    min(stats::pbeta(p_test, seq_len(n), n - seq_len(n) + 1))
 }
 
 # calculate rho value

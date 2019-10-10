@@ -17,9 +17,17 @@
 #'@importFrom graphics plot
 plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
     se <- sgRNAData(object)
-    counts1 <- assays(se[, se$samplename == rep1])$normcounts
-    counts2 <- assays(se[, se$samplename == rep2])$normcounts
-    plot(log2(counts1 + 1), log2(counts2 + 1))
+    if(rep1 %in% se$samplename & rep2 %in% se$samplename) {
+        counts1 <- assays(se[, se$samplename == rep1])$normcounts
+        counts2 <- assays(se[, se$samplename == rep2])$normcounts
+        plot(log2(counts1 + 1), log2(counts2 + 1))
+    }
+    else {
+        stop(
+            "Error: One or more of the replicate names you provide is ",
+            "not in the list of available replicates: ",
+            paste(as.character(se$samplename)))
+    }
 }
 
 
@@ -77,7 +85,7 @@ ResultsTable <- function(object, direction = "negative") {
                     pval = as.numeric(assays(genedataslot)$pvalue_pos[, 1]),
                     lfc = assays(genedataslot)$lfc)
     } else {
-        print(paste(direction, "is not a valid argument.",
-                    "Select positive or negative direction for results table."))
+        stop(direction, " is not a valid argument.",
+            "Select positive or negative direction for results table.")
     }
 }

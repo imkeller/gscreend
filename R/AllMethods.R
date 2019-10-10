@@ -1,4 +1,5 @@
 # Access the sgRNA slot
+#' @export
 setMethod("sgRNAData", "PoolScreenExp", function(x) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
@@ -7,6 +8,7 @@ setMethod("sgRNAData", "PoolScreenExp", function(x) {
 })
 
 # Write into the sgRNA slot
+#' @export
 setMethod("sgRNAData<-", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
