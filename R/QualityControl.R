@@ -16,7 +16,7 @@
 #'
 #'@importFrom graphics plot
 plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
-    se <- object@sgRNAData
+    se <- sgRNAData(object)
     counts1 <- assays(se[, se$samplename == rep1])$normcounts
     counts2 <- assays(se[, se$samplename == rep2])$normcounts
     plot(log2(counts1 + 1), log2(counts2 + 1))

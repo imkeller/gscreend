@@ -5,7 +5,7 @@
 #' @return object
 #' @keywords internal
 normalizePoolScreenExp <- function(object) {
-    sgRNAse <- object@sgRNAData
+    sgRNAse <- sgRNAData(object)
     sizefactors <- colSums(assays(sgRNAse)$counts)
     maxfact <- max(sizefactors)
     # want to divide each row of matrix by vector elements.  only works with t()
@@ -21,8 +21,8 @@ normalizePoolScreenExp <- function(object) {
 #' @return object
 #' @keywords internal
 calculateLFC <- function(object) {
-    sgRNAse <- object@sgRNAData
-    assays(object@sgRNAData)$lfc <-log2(
+    sgRNAse <- sgRNAData(object)
+    assays(sgRNAData(object))$lfc <-log2(
         (normcounts(object) + 1)/(refcounts(object)[, 1] + 1)
         )
     message("Calculated LFC.")

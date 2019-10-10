@@ -81,7 +81,7 @@ assignGeneData <- function(object, alpha_cutoff) {
     # genes (append gene list as many times as replicates)
     n_repl <- dim(pvals_neg)[2]
     genes <- do.call("rbind", replicate(n_repl,
-                        data.frame(gene = rowData(object@sgRNAData)$gene),
+                        data.frame(gene = rowData(sgRNAData(object))$gene),
                         simplify = FALSE))
 
     # calculate pvalues

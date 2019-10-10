@@ -66,7 +66,7 @@ createPoolScreenExpFromSE <- function(data) {
                 "One or more of your timepoints is names differently.")
     } else {message("References and samples are named correctly.")}
 
-    object@sgRNAData <- data
+    sgRNAData(object) <- data
     object@FittingOptions <- list(IntervalFraction = 0.1)
     object
 }

@@ -95,10 +95,10 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 #' @keywords internal
 calculatePValues <- function(object) {
     # p value matrix needs the same dimensions as coutn data
-    dimensions <- dim(object@sgRNAData)
+    dimensions <- dim(sgRNAData(object))
 
     # empty matrix to be filled with pvalues
-    assays(object@sgRNAData)$pval <- matrix(
+    assays(sgRNAData(object))$pval <- matrix(
         nrow = dimensions[1], ncol = dimensions[2])
 
     # previously determined fits and corresponding lower count limits
@@ -114,8 +114,8 @@ calculatePValues <- function(object) {
         mask <- matrix(mask, nrow = dimensions[1], ncol = dimensions[2])
 
         # assign actual p values from fit
-        assays(object@sgRNAData)$pval[mask] <- fGarch::psnorm(
-                                    assays(object@sgRNAData)$lfc[mask],
+        assays(sgRNAData(object))$pval[mask] <- fGarch::psnorm(
+                                    assays(sgRNAData(object))$lfc[mask],
                                     fits[i, 1], fits[i, 2], fits[i, 3])
     }
 
