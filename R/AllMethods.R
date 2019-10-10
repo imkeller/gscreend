@@ -1,5 +1,18 @@
-# Access the sgRNA slot
+#' Accessor function for the sgRNA slot of the PoolScreenExp class
+#'
+#' @param x PoolScreenExp object
+#'
+#' @return sgRNA slot of the object
 #' @export
+#'
+#' @examples # import a PoolScreenExp object that has been generated using
+#' # RunGscreend()
+#' pse_an <- readRDS(
+#' system.file('extdata', 'gscreend_analysed_experiment.RData',
+#' package = 'gscreend'))
+#'
+#' sgRNAData(pse_an)
+#'
 setMethod("sgRNAData", "PoolScreenExp", function(x) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
@@ -8,15 +21,28 @@ setMethod("sgRNAData", "PoolScreenExp", function(x) {
 })
 
 # Write into the sgRNA slot
-#' @export
-setMethod("sgRNAData<-", "PoolScreenExp", function(x, value) {
+setReplaceMethod("sgRNAData", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
     x@sgRNAData <- value
     x
 })
 
-# Access the Gene slot
+#' Accessor function for the Gene slot of the PoolScreenExp class
+#'
+#' @param x PoolScreenExp object
+#'
+#' @return Gene slot of the object
+#' @export
+#'
+#' @examples # import a PoolScreenExp object that has been generated using
+#' # RunGscreend()
+#' pse_an <- readRDS(
+#' system.file('extdata', 'gscreend_analysed_experiment.RData',
+#' package = 'gscreend'))
+#'
+#' GeneData(pse_an)
+#'
 setMethod("GeneData", "PoolScreenExp", function(x) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
@@ -25,7 +51,7 @@ setMethod("GeneData", "PoolScreenExp", function(x) {
 })
 
 # Write into the Gene slot
-setMethod("GeneData<-", "PoolScreenExp", function(x, value) {
+setReplaceMethod("GeneData", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
     x@GeneData <- value
@@ -39,7 +65,7 @@ setMethod("FittingOptions", "PoolScreenExp", function(x) {
     se <- x@FittingOptions
     se
 })
-setMethod("FittingOptions<-", "PoolScreenExp", function(x, value) {
+setReplaceMethod("FittingOptions", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
     x@FittingOptions <- value
@@ -53,7 +79,7 @@ setMethod("FittingIntervals", "PoolScreenExp", function(x) {
     se <- x@FittingIntervals
     se
 })
-setMethod("FittingIntervals<-", "PoolScreenExp", function(x, value) {
+setReplaceMethod("FittingIntervals", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
     x@FittingIntervals <- value
@@ -67,7 +93,7 @@ setMethod("LFCModelParameters", "PoolScreenExp", function(x) {
     se <- x@LFCModelParameters
     se
 })
-setMethod("LFCModelParameters<-", "PoolScreenExp", function(x, value) {
+setReplaceMethod("LFCModelParameters", "PoolScreenExp", function(x, value) {
     # I assume I am allowed to use the
     # direct slot access here, because there is no other way?
     x@LFCModelParameters <- value
