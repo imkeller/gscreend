@@ -17,3 +17,4 @@ object
 \description{
 Calculate gene rank
 }
+\keyword{internal}

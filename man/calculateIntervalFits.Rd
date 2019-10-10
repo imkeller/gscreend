@@ -21,3 +21,4 @@ object
 \description{
 Calculate fit parameters for every subset of data
 }
+\keyword{internal}

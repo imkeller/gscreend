@@ -11,11 +11,6 @@ vignette: >
     %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-library(gscreend)
-library(SummarizedExperiment)
-```
-
 # Introduction
 
 Pooled CRISPR perturbations screens employ a library of guide RNAs (gRNAs) that 
@@ -31,21 +26,36 @@ The package gscreend provides a method to rank genes based on count tables.
 
 In order to identify essential genes starting from raw gRNA count data,
 gscreend performs the following analysis steps:
+
 1. Input of raw gRNA counts at T0 (sequencing of library) 
 and T1 (at the end of the screen). Normalization and 
 calculation of log fold changes.
+
 2. Split log fold changes into intervals dependent on the 
 initial count at T0.
+
 3. For every interval fit a skew-normal distribution to the 
 data to model the null hypothesis (via least quantile regression).
+
 4. Based on the null model calculate p-values for every gRNA.
+
 5. Rank gRNAs according to p-value and perform robust ranking 
 aggregation to calculate p-values on gene level.
+
 6. Perform quality control of data and statistical model.
 
 # Installation
 
-devtools::install_github("imkeller/gscreend")
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("gscreend")
+```
+
+```{r}
+library(gscreend)
+library(SummarizedExperiment)
+```
 
 # Analysis of simulated data with gscreend
 
@@ -118,7 +128,7 @@ of replicate correlation for example.
 plotReplicateCorrelation(pse_an)
 ```
 
-The plotModelParameters() function can be used to inspect
+The ``plotModelParameters()`` function can be used to inspect
 the values of the parameters estimated for the
 skew normal distribution of the logarithmic fold change data.
 
@@ -135,7 +145,13 @@ upon perturbation a specific gene reduces (direction = "negative"), or
 increasing (direction = "positive") cell viability.
 
 ```{r}
-ResultsTable(pse_an, direction = "negative")
+res <- ResultsTable(pse_an, direction = "negative")
+head(res)
 ```
 
+# Session Info
+
+```{r}
+sessionInfo()
+```
 

@@ -18,6 +18,8 @@
 #' IntervalFraction - fraction of sgRNAs used in every
 #' fitting interval (default 0.1),
 #' alphaCutoff - alpha cutoff for alpha RRA algorithm (default: 0.05).
+#' @export
+#'
 setClass("PoolScreenExp", slots = c(
     sgRNAData = "SummarizedExperiment",
     FittingIntervals = "vector",

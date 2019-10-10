@@ -3,7 +3,7 @@
 #' @param object  PoolScreenExp object
 #'
 #' @return object
-#'
+#' @keywords internal
 defineFittingIntervals <- function(object) {
     # split intervals based on library counts use 10% of data
     # (parameter set in the object creation function
@@ -24,11 +24,11 @@ defineFittingIntervals <- function(object) {
 #' @param quant2 upper quantile for least quantile of squares regression
 #' (default: 0.9)
 #'
-#' @import nloptr
-#' @import fGarch
+#' @importFrom nloptr lbfgs
+#' @importFrom fGarch dsnorm
 #'
 #' @return fit_skewnorm
-#'
+#' @keywords internal
 fit_least_quantile <- function(LFC, quant1, quant2) {
     # log likelihood function of 90% most central LFC values
     ll_skewnorm <- function(x) {
@@ -37,7 +37,7 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
         xi = x[3]
         # left skew normal distribution used for fit because
         # the data is skewed towards negative LFC
-        r = dsnorm(LFC, mean, sd, xi)
+        r = fGarch::dsnorm(LFC, mean, sd, xi)
         quant10 <- stats::quantile(r, quant1, na.rm = TRUE)
         quant90 <- stats::quantile(r, quant2, na.rm = TRUE)
         r_quant <- r[r >= quant10 & r <= quant90]
@@ -45,7 +45,7 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
         -sum(log(abs(r_quant)))
     }
     # non-linear optimization
-    fit_skewnorm <- lbfgs(c(0, 1, 0.5),
+    fit_skewnorm <- nloptr::lbfgs(c(0, 1, 0.5),
                             ll_skewnorm,
                             lower = c(-2, 0, -2), upper = c(2, 2, 2))
     fit_skewnorm
@@ -61,7 +61,7 @@ fit_least_quantile <- function(LFC, quant1, quant2) {
 #' (default: 0.9)
 #'
 #' @return object
-#'
+#' @keywords internal
 calculateIntervalFits <- function(object, quant1, quant2) {
     # one fit is done for every intervall because the skew is more important
     # for perturbaions with low initial counts
@@ -91,6 +91,8 @@ calculateIntervalFits <- function(object, quant1, quant2) {
 #'
 #' @return object
 #'
+#' @importFrom fGarch psnorm
+#' @keywords internal
 calculatePValues <- function(object) {
     # p value matrix needs the same dimensions as coutn data
     dimensions <- dim(object@sgRNAData)
@@ -112,7 +114,7 @@ calculatePValues <- function(object) {
         mask <- matrix(mask, nrow = dimensions[1], ncol = dimensions[2])
 
         # assign actual p values from fit
-        assays(object@sgRNAData)$pval[mask] <- psnorm(
+        assays(object@sgRNAData)$pval[mask] <- fGarch::psnorm(
                                     assays(object@sgRNAData)$lfc[mask],
                                     fits[i, 1], fits[i, 2], fits[i, 3])
     }

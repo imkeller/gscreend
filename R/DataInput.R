@@ -25,6 +25,8 @@
 #'
 #'# create a PoolScreenExp experiment
 #'pse <- createPoolScreenExp(se)
+#'
+#' @importFrom methods is
 createPoolScreenExp <- function(data) {
     if (is(data, "SummarizedExperiment")) {
         message(
@@ -45,6 +47,8 @@ createPoolScreenExp <- function(data) {
 #'
 #' @return object
 #'
+#' @importFrom methods new
+#' @keywords internal
 createPoolScreenExpFromSE <- function(data) {
     object <- new("PoolScreenExp")
 

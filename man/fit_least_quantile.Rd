@@ -21,3 +21,4 @@ fit_skewnorm
 \description{
 Fit paramters for skew normal distribution
 }
+\keyword{internal}

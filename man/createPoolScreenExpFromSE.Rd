@@ -15,3 +15,4 @@ object
 \description{
 Create PoolScreenExp Experiment from summarized experiment
 }
+\keyword{internal}

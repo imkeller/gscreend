@@ -3,7 +3,7 @@
 #' @param object PoolScreenExp object
 #'
 #' @return object
-#'
+#' @keywords internal
 normalizePoolScreenExp <- function(object) {
     sgRNAse <- object@sgRNAData
     sizefactors <- colSums(assays(sgRNAse)$counts)
@@ -19,7 +19,7 @@ normalizePoolScreenExp <- function(object) {
 #' @param object PoolScreenExp object
 #'
 #' @return object
-#'
+#' @keywords internal
 calculateLFC <- function(object) {
     sgRNAse <- object@sgRNAData
     assays(object@sgRNAData)$lfc <-log2(

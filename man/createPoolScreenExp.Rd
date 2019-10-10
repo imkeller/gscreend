@@ -36,4 +36,5 @@ rowData=rowData, colData=colData)
 
 # create a PoolScreenExp experiment
 pse <- createPoolScreenExp(se)
+
 }

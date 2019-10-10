@@ -15,3 +15,4 @@ object
 \description{
 Calculate log fold changes
 }
+\keyword{internal}

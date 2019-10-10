@@ -14,6 +14,7 @@
 #' package = 'gscreend'))
 #' plotReplicateCorrelation(pse_an, rep1 = 'R1', rep2 = 'R2')
 #'
+#'@importFrom graphics plot
 plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
     se <- object@sgRNAData
     counts1 <- assays(se[, se$samplename == rep1])$normcounts

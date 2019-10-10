@@ -20,8 +20,7 @@ makeRhoNull <- function(n, p, nperm) {
     unlist(rhonull)
 }
 
-#' @import methods
-#'
+
 calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     cut.pvals <- pvals <= alpha_cutoff
     # ranking and scoring according to pvalues
@@ -70,7 +69,7 @@ calculateGeneLFC <- function(lfcs_sgRNAs, genes) {
 #' @param alpha_cutoff alpha cutoff for alpha-RRA (default: 0.05)
 #'
 #' @return object
-#'
+#' @keywords internal
 
 assignGeneData <- function(object, alpha_cutoff) {
     message("Ranking genes...")

@@ -15,3 +15,4 @@ object
 \description{
 Calculate interval limits for splitting data into subsets
 }
+\keyword{internal}

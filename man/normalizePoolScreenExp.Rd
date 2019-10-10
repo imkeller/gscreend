@@ -15,3 +15,4 @@ object
 \description{
 Normalize raw count
 }
+\keyword{internal}
