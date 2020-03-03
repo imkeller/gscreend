@@ -52,7 +52,7 @@ if(!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("gscreend")
 ```
 
-```{r}
+```{r, message=FALSE}
 library(gscreend)
 library(SummarizedExperiment)
 ```
@@ -124,7 +124,7 @@ pse_an <- RunGscreend(pse)
 gscreend provides basic quality control functions for inspection 
 of replicate correlation for example.
 
-```{r}
+```{r, fig.width=4, fig.height=4.5}
 plotReplicateCorrelation(pse_an)
 ```
 

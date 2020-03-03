@@ -1,0 +1,15 @@
+citEntry(entry="article",
+         title = "gscreend: modelling asymmetric count ratios in CRISPR screens to decrease experiment size and improve phenotype detection",
+         author = personList( as.person("Katharina Imkeller"),
+                              as.person("Giulia Ambrosi"),
+                              as.person("Michael Boutros"),
+                              as.person("Wolfgang Huber")),
+         year = 2020,
+         journal = "Genome Biology",
+         doi = "10.1186/s13059-020-1939-1",
+         volume = 21,
+         issue = 53,
+         textVersion = 
+         paste("Imkeller, K., Ambrosi, G., Boutros, M., Huber, W.", 
+               "gscreend: modelling asymmetric count ratios in CRISPR screens to decrease experiment size and improve phenotype detection.",
+                "Genome Biology 21, 53. (2020)" ))

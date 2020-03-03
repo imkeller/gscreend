@@ -20,7 +20,7 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
     if(rep1 %in% se$samplename & rep2 %in% se$samplename) {
         counts1 <- assays(se[, se$samplename == rep1])$normcounts
         counts2 <- assays(se[, se$samplename == rep2])$normcounts
-        plot(log2(counts1 + 1), log2(counts2 + 1))
+        plot(log2(counts1 + 1), log2(counts2 + 1), asp=1)
     }
     else {
         stop(
