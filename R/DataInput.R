@@ -66,6 +66,16 @@ createPoolScreenExpFromSE <- function(data) {
                 "One or more of your timepoints is names differently.")
     } else {message("References and samples are named correctly.")}
 
+    # Check whether rownames are correct
+    if (!is.element("sgRNA_id", colnames(rowData(data)))) {
+        stop("The rowData of SummarizedExperiment needs to contain a column named \"sgRNA_id\". ",
+             "The columns you provided are: ", paste(colnames(rowData(data)), " "))
+    } else if (!is.element("gene", colnames(rowData(data)))) {
+        stop("The rowData of SummarizedExperiment needs to contain a column named \"gene\". ",
+             "The columns you provided are: ", paste(colnames(rowData(data)), " "))
+    }
+    else {message("Data concerning sgRNA and genes is provided.")}
+
     sgRNAData(object) <- data
     FittingOptions(object) <- list(IntervalFraction = 0.1)
     object
