@@ -45,6 +45,10 @@ plotReplicateCorrelation <- function(object, rep1 = "R1", rep2 = "R2") {
 #' package = 'gscreend'))
 #' plotModelParameters(pse_an)
 plotModelParameters <- function(object) {
+    if (!is.numeric(FittingIntervals(object))) {
+        stop("It seems that you are tying to plot paramters from an object that ",
+             "has not been analysed yet. Please run RunGscreend()!")}
+    else {
     limits <- FittingIntervals(object)
     limits <- limits[seq_len(length(limits)) - 1]
     parameters <- LFCModelParameters(object)
@@ -52,6 +56,7 @@ plotModelParameters <- function(object) {
     plot(limits, parameters[, 1], main = "Mean")
     plot(limits, parameters[, 2], main = "Sd")
     plot(limits, parameters[, 3], main = "Xi")
+    }
 }
 
 
@@ -72,6 +77,10 @@ plotModelParameters <- function(object) {
 #' ResultsTable(pse_an, direction = 'negative')
 #'
 ResultsTable <- function(object, direction = "negative") {
+    if (all(dim(GeneData(object)) == 0)) {
+        stop("It seems that you are tying to create the ResultsTable from an object that ",
+            "has not been analysed yet. Please run RunGscreend()!")}
+    else {
     if (direction == "negative") {
         genedataslot <- GeneData(object)
         data.frame(Name = rownames(assays(genedataslot)$fdr_neg),
@@ -87,5 +96,5 @@ ResultsTable <- function(object, direction = "negative") {
     } else {
         stop(direction, " is not a valid argument.",
             "Select positive or negative direction for results table.")
-    }
+    }}
 }
