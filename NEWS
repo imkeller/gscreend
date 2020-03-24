@@ -1,5 +1,15 @@
 NEWS for gscreend package
 
+CHANGES IN VERSION 1.0.1
+--------------------------
+
+    - The data input function raises errors, when column naming concerning
+      sgRNAs or genes in not clear.
+    
+    - Functions that can only be run after analysing data raise errors when
+      you try to run them before the model has been fitted and 
+      statistics computed.
+
 CHANGES IN VERSION 1.0.0
 --------------------------
 
