@@ -1,9 +1,11 @@
 NEWS for gscreend package
 
-CHANGES IN VERSION 1.7.0
+CHANGES IN VERSION 1.8.0
 --------------------------
 
     - Improved parallelization implementation for a faster analysis performance.
+    
+    - resolved knitr error June 2021
 
 CHANGES IN VERSION 1.0.1
 --------------------------
