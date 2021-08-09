@@ -1,5 +1,10 @@
 NEWS for gscreend package
 
+CHANGES IN VERSION 1.7.0
+--------------------------
+
+    - Improved parallelization implementation for a faster analysis performance.
+
 CHANGES IN VERSION 1.0.1
 --------------------------
 

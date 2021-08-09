@@ -13,21 +13,26 @@ alphaBeta <- function(p_test) {
 
 # calculate rho value
 makeRhoNull <- function(n, p, nperm) {
-    rhonull <- BiocParallel::bplapply(seq_len(nperm), function(x) {
-        p_test <- sort.int(sample(p, n, replace = FALSE))
-        alphaBeta(p_test)
-    })
-    unlist(rhonull)
+    # if perm_genes = 10 we want to split the permutations into 5 processes
+    n_processes <- 4
+    rhonull <- BiocParallel::bplapply(seq_len(n_processes),
+            function(x) { vapply(seq_len(nperm/n_processes), function(x) {alphaBeta(sample(p, n, replace = FALSE))},
+                FUN.VALUE = numeric(1)) }
+        )
+   unlist(rhonull)
 }
 
 
-calculateGenePval <- function(pvals, genes, alpha_cutoff) {
+calculateGenePval <- function(pvals, genes, alpha_cutoff,
+    # permutations = perm_genes * genes
+    perm_genes = 8) {
     cut.pvals <- pvals <= alpha_cutoff
     # ranking and scoring according to pvalues
     score_vals <- rank(pvals)/length(pvals)
-    score_vals[!cut.pvals] <- 1
+    score_vals[!cut.pvals] <- as.numeric(1)
 
     # calculate rho for every count gene
+
     rho <- unsplit(vapply(split(score_vals, genes),
                                 FUN = alphaBeta,
                                 FUN.VALUE = numeric(1)),
@@ -36,10 +41,12 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     guides_per_gene <- sort(unique(table(genes)))
 
     # store this as model parameter
-    permutations = 10 * nrow(unique(genes))
+    permutations <- perm_genes * nrow(unique(genes))
 
     # this does not need to be parallelized because its calling
     # a function that is already serialized
+
+    # this is the step that takes longest to complete
     rho_nullh <- vapply(guides_per_gene,
                         FUN = makeRhoNull,
                         p = score_vals,
@@ -49,10 +56,12 @@ calculateGenePval <- function(pvals, genes, alpha_cutoff) {
     # Split by gene, make comparison with null model
     # from makeRhoNull, and unsplit by gene
 
-    pvalue_gene <- BiocParallel::bplapply(split(rho, genes), function(x) {
+    # this is faster than using the Bioc::Parallel option
+    pvalue_gene <- vapply(split(rho, genes), function(x) {
         n_sgrnas = length(x)
         mean(rho_nullh[, guides_per_gene == n_sgrnas] <= x[[1]])
-    })
+    }, FUN.VALUE = numeric(1))
+
 
     pvalue_gene
 }
@@ -85,7 +94,9 @@ assignGeneData <- function(object, alpha_cutoff) {
                         simplify = FALSE))
 
     # calculate pvalues
+    message("... for positive fold changes")
     gene_pval_neg <- calculateGenePval(pvals_neg, genes, alpha_cutoff)
+    message("... for negative fold changes")
     gene_pval_pos <- calculateGenePval(pvals_pos, genes, alpha_cutoff)
 
     # calculate fdrs from pvalues
