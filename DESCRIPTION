@@ -1,7 +1,7 @@
 Package: gscreend
 Type: Package
 Title: Analysis of pooled genetic screens
-Version: 1.7.1
+Version: 1.8.0
 Authors@R: c(
     person("Katharina", "Imkeller", email = "k.imkeller@dkfz.de", role = c("cre", "aut")),
     person("Wolfgang", "Huber", email = "wolfgang.huber@embl.de", role = "aut"))
