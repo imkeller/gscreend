@@ -1,7 +1,7 @@
 Package: gscreend
 Type: Package
 Title: Analysis of pooled genetic screens
-Version: 1.7.2
+Version: 1.17.1
 Authors@R: c(
     person("Katharina", "Imkeller", email = "k.imkeller@dkfz.de", role = c("cre", "aut")),
     person("Wolfgang", "Huber", email = "wolfgang.huber@embl.de", role = "aut"))
@@ -17,3 +17,4 @@ RoxygenNote: 7.2.3
 biocViews: Software, StatisticalMethod, PooledScreens, CRISPR
 URL: https://github.com/imkeller/gscreend
 BugReports: https://github.com/imkeller/gscreend/issues
+PackageStatus: Deprecated
