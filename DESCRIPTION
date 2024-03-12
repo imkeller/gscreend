@@ -17,4 +17,3 @@ RoxygenNote: 7.2.3
 biocViews: Software, StatisticalMethod, PooledScreens, CRISPR
 URL: https://github.com/imkeller/gscreend
 BugReports: https://github.com/imkeller/gscreend/issues
-PackageStatus: Deprecated
